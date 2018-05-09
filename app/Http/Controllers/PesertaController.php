@@ -8,6 +8,8 @@ use App\Peserta;
 use App\TahunAjar;
 use App\TahunAktif;
 
+use Excel;
+
 class PesertaController extends Controller
 {
     public function __construct() {
@@ -134,5 +136,84 @@ class PesertaController extends Controller
             return redirect(route('admin.peserta.index'))->with('notification', 'Action completed');
         }
 
+    }
+
+    public function importView() {
+
+        return view('admin.peserta.import');
+
+    }
+
+    public function import(Request $request) {
+
+        // return $request->hasFile('import_file') ? 'true' : 'false';
+
+        if($request->hasFile('import_file')){
+            $path = $request->file('import_file')->getRealPath();
+            $data = Excel::load($path)->get();
+
+            if($data->count()){
+                foreach ($data as $key => $value) {
+
+                    // Validasi
+                    $id_tahun_ajar = TahunAjar::where('tahun_ajar', $value->tahun_ajar)->first()['id_tahun_ajar'] ?: null;
+
+                    // return $id_tahun_ajar;
+
+                    if($id_tahun_ajar == null) {
+
+                        return back()->with('notification', 'Tahun ajar <h3 class="text-danger">'.$value->tahun_ajar.'</h3> tidak terdaftar');
+
+                    }
+
+
+                    $peserta[] = [
+
+                        'id_peserta'        => $value->id_peserta,
+                        'nama'              => $value->nama,
+                        'alamat'            => $value->alamat,
+                        'tanggal_lahir'     => date('Y-m-d', strtotime($value->tanggal_lahir)),
+                        'jenis_kelamin'     => $value->jenis_kelamin,
+                        'email'             => $value->email,
+                        'kontak'            => $value->kontak,
+                        'id_tahun_ajar'     => $id_tahun_ajar,
+
+                    ];
+                }
+
+                // Mengambil semua id peserta
+                $daftar_id = Peserta::get(['id_peserta']);
+                
+                // Menyimpan nya ke array
+                foreach($daftar_id as $key => $daftar) {
+                    $id_peserta[$key] = $daftar->id_peserta;
+                }
+
+                // Handle id yang sudah ada
+                foreach($peserta as $s) {
+                    if(in_array($s['id_peserta'], $id_peserta) ) {
+                        return redirect()->back()->with('notification', "ID ".$s['id_peserta']." sudah terdaftar!");
+                    }
+                }
+
+                if(!empty($peserta)){
+
+                    if(count($peserta) > $data->count()) {
+                        $dataCount = $data->count(); // Jumlah data asli
+                        $emptyCount = count($peserta); // Jumlah data keseluruhan (plus empty row)
+
+                        // return $dataCount;
+                        for($x = $dataCount; $x <= $emptyCount; $x++) {
+                            unset($peserta[$x]); // Menghapus row kosong
+                        }
+                    }
+
+                    \DB::table('peserta')->insert($peserta);
+
+                    // return 'hai';
+                    return redirect()->back()->with('notification', 'Import data berhasil dilakukan');
+                }
+            }
+        }
     }
 }

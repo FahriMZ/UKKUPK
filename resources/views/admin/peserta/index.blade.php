@@ -15,6 +15,7 @@
 
 <a href="{{route('admin.peserta.create')}}" class="btn btn-outline-success add">Tambah Peserta</a>
 
+<a href="{{route('admin.peserta.import')}}" class="btn btn-success add-two">Import Peserta</a>
 <div class="container-fluid">
 
 <div class="container-fluid card card-body card-title">

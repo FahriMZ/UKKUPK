@@ -56,6 +56,8 @@ Route::name('admin.peserta.')->group(function () {
     Route::get('/admin/peserta', 'PesertaController@index')->name('index');
     Route::get('/admin/peserta/create', 'PesertaController@create')->name('create');
     Route::post('/admin/peserta/store', 'PesertaController@store')->name('store');
+    Route::get('/admin/peserta/import', 'PesertaController@importView')->name('import');
+    Route::post('/admin/peserta/import', 'PesertaController@import');
     Route::get('/admin/peserta/edit/{id}', 'PesertaController@edit')->name('edit');
     Route::post('/admin/peserta/edit/{id}', 'PesertaController@update')->name('update');
     Route::get('/admin/peserta/delete/{id}', 'PesertaController@destroy')->name('delete');

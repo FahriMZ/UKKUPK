@@ -25,6 +25,13 @@
         z-index: 1000;
     }
 
+    .add-two {
+        position: fixed;
+        bottom: 35px;
+        right: 175px;
+        z-index: 1000;
+    }
+
     .notifikasi {
        position: absolute;
        top: 0px;
@@ -137,7 +144,7 @@
                 </button>
               </div> -->
               <div class="modal-body bg-dark text-white">
-                {{ session('notification') }}
+                {!! session('notification') !!}
               </div>
             </div>
           </div>
