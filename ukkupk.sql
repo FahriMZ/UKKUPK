@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: localhost
--- Generation Time: May 06, 2018 at 01:13 PM
+-- Generation Time: May 09, 2018 at 06:58 AM
 -- Server version: 10.2.14-MariaDB
 -- PHP Version: 7.1.16
 
@@ -49,7 +49,8 @@ INSERT INTO `asesor` (`id_asesor`, `id_user`, `id_perusahaan`, `nama`, `alamat`,
 (9, 11, 2, 'Testah', 'fjaldskfjkadjfkadsjf', 'Laki-laki', '2000-10-10', '4230498329'),
 (10, 12, 2, 'Dander', 'fkadkfjkajfsdkjf', 'Perempuan', '1999-03-21', '38402342342'),
 (11, 13, 7, 'Regisonine', 'fkljdfkldsjalkjsklj', 'Perempuan', '1991-12-08', '472938472389748'),
-(12, 14, 7, 'fdasfas', 'fadhfkasjdfhk', 'Laki-laki', '2018-05-09', '23749829');
+(12, 14, 7, 'fdasfas', 'fadhfkasjdfhk', 'Laki-laki', '2018-05-09', '23749829'),
+(13, 15, 2, 'Nande', 'fjkadsjkl', 'Perempuan', '2018-12-12', '389032849032');
 
 -- --------------------------------------------------------
 
@@ -88,6 +89,72 @@ CREATE TABLE `detail_penilaian` (
   `skor` int(11) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
+--
+-- Dumping data for table `detail_penilaian`
+--
+
+INSERT INTO `detail_penilaian` (`id_detail_penilaian`, `id_penilaian`, `id_komponen`, `skor`) VALUES
+(333, 16, 3, 10),
+(334, 16, 4, 7),
+(335, 16, 6, 7),
+(336, 16, 10, 7),
+(337, 16, 16, 7),
+(338, 16, 17, 7),
+(339, 16, 18, 7),
+(340, 16, 19, 7),
+(341, 16, 20, 7),
+(342, 16, 21, 7),
+(343, 16, 22, 7),
+(344, 16, 23, 7),
+(345, 16, 24, 7),
+(346, 16, 28, 7),
+(347, 16, 29, 7),
+(348, 16, 30, 7),
+(349, 16, 31, 7),
+(350, 16, 33, 7),
+(351, 16, 35, 7),
+(352, 16, 36, 7),
+(353, 16, 38, 7),
+(354, 16, 39, 7),
+(355, 16, 40, 7),
+(356, 16, 41, 7),
+(357, 16, 43, 7),
+(358, 16, 44, 7),
+(359, 16, 45, 7),
+(360, 16, 46, 7),
+(361, 16, 47, 7),
+(362, 16, 48, 7),
+(363, 17, 3, 10),
+(364, 17, 4, 10),
+(365, 17, 6, 10),
+(366, 17, 10, 10),
+(367, 17, 16, 10),
+(368, 17, 17, 10),
+(369, 17, 18, 10),
+(370, 17, 19, 10),
+(371, 17, 20, 10),
+(372, 17, 21, 10),
+(373, 17, 22, 10),
+(374, 17, 23, 10),
+(375, 17, 24, 10),
+(376, 17, 28, 10),
+(377, 17, 29, 10),
+(378, 17, 30, 10),
+(379, 17, 31, 10),
+(380, 17, 33, 10),
+(381, 17, 35, 10),
+(382, 17, 36, 10),
+(383, 17, 38, 10),
+(384, 17, 39, 10),
+(385, 17, 40, 10),
+(386, 17, 41, 10),
+(387, 17, 43, 10),
+(388, 17, 44, 10),
+(389, 17, 45, 10),
+(390, 17, 46, 10),
+(391, 17, 47, 10),
+(392, 17, 48, 10);
+
 -- --------------------------------------------------------
 
 --
@@ -97,7 +164,7 @@ CREATE TABLE `detail_penilaian` (
 CREATE TABLE `dokumen_asesor` (
   `id_dokumen` int(11) NOT NULL,
   `nama_dokumen` text NOT NULL,
-  `tanggal_diupload` date NOT NULL DEFAULT current_timestamp(),
+  `tanggal_diupload` timestamp NOT NULL DEFAULT current_timestamp(),
   `id_asesor` int(11) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
@@ -106,13 +173,13 @@ CREATE TABLE `dokumen_asesor` (
 --
 
 INSERT INTO `dokumen_asesor` (`id_dokumen`, `nama_dokumen`, `tanggal_diupload`, `id_asesor`) VALUES
-(19, 'globe_1525231660.jpg', '2018-05-02', 4),
-(20, 'ulah_user_guide_1525229118_1525270376.odt', '2018-05-02', 4),
-(21, 'ulah_user_guide_1525270405.pdf', '2018-05-02', 4),
-(22, 'vue_icon_1525577878.png', '2018-05-06', 4),
-(23, 'vue_icon_1525577887.png', '2018-05-06', 4),
-(25, 'vue_icon_1525577929.png', '2018-05-06', 4),
-(26, 'favicon_1525578432.jpg', '2018-05-06', 4);
+(19, 'globe_1525231660.jpg', '2018-05-01 17:00:00', 4),
+(20, 'ulah_user_guide_1525229118_1525270376.odt', '2018-05-01 17:00:00', 4),
+(21, 'ulah_user_guide_1525270405.pdf', '2018-05-01 17:00:00', 4),
+(22, 'vue_icon_1525577878.png', '2018-05-05 17:00:00', 4),
+(23, 'vue_icon_1525577887.png', '2018-05-05 17:00:00', 4),
+(25, 'vue_icon_1525577929.png', '2018-05-05 17:00:00', 4),
+(26, 'favicon_1525578432.jpg', '2018-05-05 17:00:00', 4);
 
 -- --------------------------------------------------------
 
@@ -233,6 +300,14 @@ CREATE TABLE `penilaian` (
   `paket_soal` varchar(10) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
+--
+-- Dumping data for table `penilaian`
+--
+
+INSERT INTO `penilaian` (`id_penilaian`, `id_asesor`, `id_peserta`, `paket_soal`) VALUES
+(16, 4, '01-111-007-2', '1'),
+(17, 4, '01-111-029-3', '1');
+
 -- --------------------------------------------------------
 
 --
@@ -339,13 +414,14 @@ CREATE TABLE `users` (
 --
 
 INSERT INTO `users` (`id_user`, `username`, `password`, `akses`, `email`, `remember_token`) VALUES
-(3, 'Administrator', '$2y$10$.SG1DHD0ZJrsZbl.ZPMNf.1VdpVWqhktOEOWfT1iBavA6HXQxFVvm', 'administrator', 'muhfah666@gmail.com', 'En5vZATDrGzbJow4QrF4jB6p1DCgpcaXQ4plwwqTWuWB1on43Od1SPpPeZHn'),
-(6, 'wessti', '$2y$10$ZqK9o6NOH3hQxzJaSnrouOzIOigKKjlRVnQszojuDoTOeNWR1TxZK', 'asesor', 'wsetiawan135790@gmail.com', 'anKCQraM4TrYLJwHl3METTiScvxFjCJU87fQncAlCVdCd5DfpzjlAtd4IeOh'),
+(3, 'Administrator', '$2y$10$.SG1DHD0ZJrsZbl.ZPMNf.1VdpVWqhktOEOWfT1iBavA6HXQxFVvm', 'administrator', 'muhfah666@gmail.com', 'SIzni4tMhyMQXZu7e3qtx0XdYnuI62ObNhkNHOs42oaPNPjXj1oVs9grxFOL'),
+(6, 'wessti', '$2y$10$ZqK9o6NOH3hQxzJaSnrouOzIOigKKjlRVnQszojuDoTOeNWR1TxZK', 'asesor', 'wsetiawan135790@gmail.com', '04NTFLLO8XT5l7vKwG21L9pRl9jzzaLH3jMkUfoQTfvSNXbERRdM00FruEcl'),
 (9, 'mht', '$2y$10$T1L/iJAxmR4MS0ALMi7Ed.UeYRgPpfMorRbAhQtWVsuyqOAJgN9IS', 'asesor', 'kukuhpelig15@gmail.com', NULL),
 (11, '10102000-8-PTB', '$2y$10$oUwP6oWmvYdrH/lnu9eCeO7ee2BDwdkUkMbhGiqF1zsPKDJ0MKms2', 'asesor', 'fads@fadsdfa.cs', NULL),
 (12, '21031999-9-PTB', '$2y$10$qeHhUs0ChEqfNys6K8jrUubhqzsQdy4v33QZ0a5N0iTKiv8XBjEPW', 'asesor', 'fdasl@fda.cs', NULL),
 (13, '08121991-10-CT', '$2y$10$DtOc9qzp4vm/T.LDS9GCx.swzusGCYaI7zXp6BMVF5OG1kx/Tbh.e', 'asesor', 'fadsf122@fdfa.com', 'AjNHQ73cYsmWdyveoThcyzKULJvuyUsHW3c11TLb3icHZnTlGiIOi4CUVYIi'),
-(14, '09052018-11-CT', '$2y$10$o6HQS0svlLQ2l6ZIrMYb5uemftCx3fQNLsM2JG8qvnn24BoOfgNBe', 'asesor', 'fadsfjal@fadsaldflc.s', NULL);
+(14, '09052018-11-CT', '$2y$10$o6HQS0svlLQ2l6ZIrMYb5uemftCx3fQNLsM2JG8qvnn24BoOfgNBe', 'asesor', 'fadsfjal@fadsaldflc.s', NULL),
+(15, '12122018-12-PTB', '$2y$10$9CN.Lmfh4zEwDWs8.HIvt..W14qSiU9uvWnRS712kh8D9MjCSbcZO', 'asesor', 'dsfa@fdssd.co', NULL);
 
 --
 -- Indexes for dumped tables
@@ -443,7 +519,7 @@ ALTER TABLE `users`
 -- AUTO_INCREMENT for table `asesor`
 --
 ALTER TABLE `asesor`
-  MODIFY `id_asesor` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=13;
+  MODIFY `id_asesor` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=14;
 
 --
 -- AUTO_INCREMENT for table `detail_komponen`
@@ -455,7 +531,7 @@ ALTER TABLE `detail_komponen`
 -- AUTO_INCREMENT for table `detail_penilaian`
 --
 ALTER TABLE `detail_penilaian`
-  MODIFY `id_detail_penilaian` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=333;
+  MODIFY `id_detail_penilaian` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=393;
 
 --
 -- AUTO_INCREMENT for table `dokumen_asesor`
@@ -479,7 +555,7 @@ ALTER TABLE `komponen`
 -- AUTO_INCREMENT for table `penilaian`
 --
 ALTER TABLE `penilaian`
-  MODIFY `id_penilaian` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=16;
+  MODIFY `id_penilaian` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=18;
 
 --
 -- AUTO_INCREMENT for table `perusahaan`
@@ -503,7 +579,7 @@ ALTER TABLE `tahun_aktif`
 -- AUTO_INCREMENT for table `users`
 --
 ALTER TABLE `users`
-  MODIFY `id_user` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=15;
+  MODIFY `id_user` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=16;
 
 --
 -- Constraints for dumped tables
