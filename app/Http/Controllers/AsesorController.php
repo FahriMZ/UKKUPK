@@ -51,6 +51,11 @@ class AsesorController extends Controller
     public function create()
     {
         $perusahaan = Perusahaan::all();
+
+        if($perusahaan->count() == 0 ) {
+            return back()->with('notification', 'Daftarkan <span class="text-info">PERUSAHAAN</span> terlebih dahulu !');
+        }
+
         return view('admin.asesor.create', compact('perusahaan'));
     }
 
@@ -62,6 +67,7 @@ class AsesorController extends Controller
      */
     public function store(Request $data)
     {
+
         // dd($data->all());
 
         // Default akun untuk asesor
@@ -69,7 +75,7 @@ class AsesorController extends Controller
         // Default username
         $username = date('dmY', strtotime($data['tanggal_lahir']));
         $username .= '-';
-        $username .= Asesor::orderBy('id_asesor', 'desc')->first()['id_asesor'];
+        $username .= Asesor::orderBy('id_asesor', 'desc')->first()['id_asesor']+1;
         $username .= '-';
 
         $nama_perusahaan = explode(' ', Perusahaan::where('id_perusahaan', $data['id_perusahaan'])->first()['nama_perusahaan']);
@@ -184,7 +190,7 @@ class AsesorController extends Controller
         }
 
         if($asesor && $user) {
-            return redirect(route('admin.asesor.index'))->with('notification', 'Action completed');
+            return back()->with('notification', 'Action completed');
         }
     }
 

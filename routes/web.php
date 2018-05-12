@@ -19,6 +19,7 @@ Route::get('/', function () {
 Auth::routes();
 
 Route::get('/home', 'HomeController@index')->name('home');
+Route::get('/admin/buat-akun', 'HomeController@createAdmin')->name('admin.create');
 
 // Tahun Aktif
 Route::get('admin/set-tahun-aktif', 'TahunAktifController@index')->name('set-tahun-aktif');

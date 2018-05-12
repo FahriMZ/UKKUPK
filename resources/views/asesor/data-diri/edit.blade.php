@@ -159,7 +159,8 @@
                         <div class="col-md-6">
                             <input id="password" type="password" class="form-control{{ $errors->has('password') ? ' is-invalid' : '' }}" name="password">
 
-                            <span class="text-muted">Kosongkan password jika tidak ingin diubah</span>
+                            <span class="text-muted">Kosongkan password jika tidak ingin diubah.</span>
+                            <span class="text-muted">Default password : <code>123456</code></span>
                         </div>
                     </div>
                 </div>

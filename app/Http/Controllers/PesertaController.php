@@ -181,19 +181,23 @@ class PesertaController extends Controller
                     ];
                 }
 
-                // Mengambil semua id peserta
-                $daftar_id = Peserta::get(['id_peserta']);
-                
-                // Menyimpan nya ke array
-                foreach($daftar_id as $key => $daftar) {
-                    $id_peserta[$key] = $daftar->id_peserta;
-                }
+                // Mengambil semua id peserta & handle duplikat
+                if(Peserta::get()->count() > 0) {
 
-                // Handle id yang sudah ada
-                foreach($peserta as $s) {
-                    if(in_array($s['id_peserta'], $id_peserta) ) {
-                        return redirect()->back()->with('notification', "ID ".$s['id_peserta']." sudah terdaftar!");
+                    $daftar_id = Peserta::get(['id_peserta']);
+                
+                    // Menyimpan nya ke array
+                    foreach($daftar_id as $key => $daftar) {
+                        $id_peserta[$key] = $daftar->id_peserta;
                     }
+
+                    // Handle id yang sudah ada
+                    foreach($peserta as $s) {
+                        if(in_array($s['id_peserta'], $id_peserta) ) {
+                            return redirect()->back()->with('notification', "ID ".$s['id_peserta']." sudah terdaftar!");
+                        }
+                    }
+
                 }
 
                 if(!empty($peserta)){

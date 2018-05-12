@@ -76,7 +76,7 @@ class RegisterController extends Controller
         // Default username
         $username = date('dmY', strtotime($data['tanggal_lahir']));
         $username .= '-';
-        $username .= Asesor::orderBy('id_asesor', 'desc')->first()['id_asesor'];
+        $username .= Asesor::orderBy('id_asesor', 'desc')->first()['id_asesor'] + 1;
         $username .= '-';
 
         $nama_perusahaan = explode(' ', Perusahaan::where('id_perusahaan', $data['id_perusahaan'])->first()['nama_perusahaan']);

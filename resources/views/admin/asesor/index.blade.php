@@ -28,7 +28,7 @@
     </div>
 
     @if($asesor->count() <= 0)
-    <h3>Tidak ada asesor :)</h3>
+    <h3>Tidak ada asesor</h3>
 
     @else
 

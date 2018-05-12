@@ -137,10 +137,11 @@ class PenilaianController extends Controller
                         ->where('peserta.id_tahun_ajar', TahunAktif::first()['id_tahun_ajar'])
                         ->get();
 
-        // dd($penilaian);
+        // dd($penilaian->count() === 0 ?: 'error');
 
-        if($penilaian->count() <= 0) {
-            return redirect(route('asesor.penilaian.index'))->with('notification', 'Tidak ada penilaian');
+        if($penilaian->count() === 0) {
+            return 0;
+            // return back()->with('notification', 'Tidak ada penilaian');
         }
 
 
@@ -215,10 +216,10 @@ class PenilaianController extends Controller
             $arrNilai[$key]['total'] = array_sum($komponen['nilai']);
         }
 
-        // dd($arrNilai);
+        // echo ($arrNilai);
 
         // return view('admin.penilaian.export', compact('tahunAktif', 'komponenUtama', 'arr', 'arrNilai'));
-
+        // dd($arrNilai);
         return $arrNilai;
 
     }
@@ -229,6 +230,10 @@ class PenilaianController extends Controller
         $tahunAktif = TahunAktif::first();
 
         $arrNilai = $this->exportData();
+
+        if($arrNilai === 0) {
+            return back()->with('notification', 'Tidak ada penilaian');
+        }
 
         return view('admin.penilaian.export', compact('tahunAktif', 'komponenUtama', 'arrNilai'));
     }
