@@ -13,6 +13,8 @@ use App\DetailKomponen;
 
 use Auth;
 
+use PHPExcel_Worksheet_Drawing;
+
 class PenilaianController extends Controller
 {
 
@@ -123,24 +125,32 @@ class PenilaianController extends Controller
         return redirect()->back()->with('notification', 'Action Completed');
     }
 
-    public function exportView() {
 
-        $penilaian = Penilaian::join('detail_penilaian', 'detail_penilaian.id_penilaian', 'penilaian.id_penilaian')->get();
+    // Memproses semua nilai akhir
+    public function exportData() {
+
+        $komponenUtama = Komponen::where('parent_komponen', null)->get();
+
+
+        $penilaian = Penilaian::join('detail_penilaian', 'detail_penilaian.id_penilaian', 'penilaian.id_penilaian')
+                        ->join('peserta', 'penilaian.id_peserta', 'peserta.id_peserta')
+                        ->where('peserta.id_tahun_ajar', TahunAktif::first()['id_tahun_ajar'])
+                        ->get();
+
+        // dd($penilaian);
 
         if($penilaian->count() <= 0) {
             return redirect(route('asesor.penilaian.index'))->with('notification', 'Tidak ada penilaian');
         }
 
 
-        $komponenUtama = Komponen::where('parent_komponen', null)->get();
-
-        $tahunAktif = TahunAktif::first();
-
         // dd($penilaian);
 
         $arrPenilaian = [];
 
-        $pesertaDinilai = Peserta::join('penilaian', 'peserta.id_peserta', 'penilaian.id_peserta')->get();
+        $pesertaDinilai = Peserta::join('penilaian', 'peserta.id_peserta', 'penilaian.id_peserta')
+                            ->where('peserta.id_tahun_ajar', TahunAktif::first()['id_tahun_ajar'])
+                            ->get();
 
         foreach ($pesertaDinilai as $keyPeserta => $peserta) {
             foreach ($komponenUtama as $key => $komponen) {
@@ -207,7 +217,20 @@ class PenilaianController extends Controller
 
         // dd($arrNilai);
 
-        return view('admin.penilaian.export', compact('tahunAktif', 'komponenUtama', 'arr', 'arrNilai'));
+        // return view('admin.penilaian.export', compact('tahunAktif', 'komponenUtama', 'arr', 'arrNilai'));
+
+        return $arrNilai;
+
+    }
+
+    public function exportView() {
+        $komponenUtama = Komponen::where('parent_komponen', null)->get();
+
+        $tahunAktif = TahunAktif::first();
+
+        $arrNilai = $this->exportData();
+
+        return view('admin.penilaian.export', compact('tahunAktif', 'komponenUtama', 'arrNilai'));
     }
 
     // Function untuk rumus nilai komponen
@@ -215,6 +238,98 @@ class PenilaianController extends Controller
         $nilai_komponen = $skor_perolehan / $skor_maksimal * $bobot;
 
         return $nilai_komponen;
+    }
+
+
+    // Export ke excel
+    public function export() {
+
+        \Excel::create('PENILAIAN_UJIAN_PRAKTIK_KEJURUAN_'.date('d_m_Y'), function($excel) {
+
+            $arrNilai = $this->exportData();
+
+            // Konversi array multi dimensi ke satu dimensi
+            foreach($arrNilai as $key => $peserta) {
+                // $peserta = array_flatten($peserta);
+                $arrNilai[$key] = array_flatten($peserta);
+
+                // dd($peserta);
+            }
+
+            $tahunAjar = TahunAktif::first()->tahunAjar->tahun_ajar;
+
+            // dd($tahunAjar);
+
+            $judul = 'Lembar penilaian ujian praktik keujuruan untuk uji kompetensi keahlian';
+
+            $excel->setDescription($judul.' '.$tahunAjar);
+            $excel->sheet('Penilaian', function($sheet) use ($arrNilai, $judul, $tahunAjar) {
+                $sheet->fromArray($arrNilai, null, 'A7', false, false);
+
+                $headings = array('Nomor Peserta', 'Nama');
+
+                $komponenUtama = Komponen::where('parent_komponen', null)->get();
+
+                // menambahkan semua komponen ke headings
+                foreach ($komponenUtama as $key => $komponen) {
+                    $headings[] = $komponen->komponen;
+                }
+
+                $headings[] = 'Total NK';
+
+
+                // $sheet->prependRow(1, array());
+                // $sheet->prependRow(2, array());
+                $sheet->prependRow(3, array(strtoupper($judul)));
+                $sheet->prependRow(4, array('TAHUN PELAJARAN '.$tahunAjar));
+                // $sheet->prependRow(5, array());
+                $sheet->prependRow(9, $headings);
+
+                // Style
+                $sheet->setAutoSize(true);
+                $sheet->mergeCells('A3:H3');
+                $sheet->mergeCells('A4:H4');
+                $sheet->getStyle('A3')->getAlignment()->applyFromArray(
+                    array('horizontal' => 'center')
+                );
+                $sheet->getStyle('A4')->getAlignment()->applyFromArray(
+                    array('horizontal' => 'center')
+                );
+                $sheet->cell('A9:h9', function($cell){
+                    $cell->setBorder('thin','thin','thin','thin');
+                });
+
+                // Insert gambar ke file
+
+                $objDrawing = new PHPExcel_Worksheet_Drawing;
+
+                $objDrawing->setPath(public_path('image/jabar.png')); // Gambar nya
+
+                // Size
+                $objDrawing->setWidthAndHeight(100, 100);
+
+                $objDrawing->setCoordinates('G2'); // Koordinat / penempatan
+
+                $objDrawing->setWorksheet($sheet);
+
+                // Gambar 2
+                $objDrawing2 = new PHPExcel_Worksheet_Drawing;
+
+                $objDrawing2->setPath(public_path('image/smkn11.jpeg')); // Gambar nya
+
+                // Size
+                $objDrawing2->setWidthAndHeight(100, 100);
+
+                $objDrawing2->setCoordinates('A2'); // Koordinat / penempatan
+
+                $objDrawing2->setWorksheet($sheet);
+
+            });
+
+        })->export('xlsx');
+
+        return back()->with('notification', 'Action completed');
+
     }
 
 }

@@ -6,7 +6,7 @@
 
 @section('content')
 
-<a href="{{route('admin.penilaian.export')}}" class="btn btn-outline-success add">Export Penilaian</a>
+<a href="{{route('admin.penilaian.export-excel')}}" class="btn btn-outline-success add">Export Penilaian</a>
 
 <div class="container-fluid">
 	<div class="card">

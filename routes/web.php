@@ -116,6 +116,7 @@ Route::name('admin.penilaian.')->group(function () {
     Route::get('/admin/penilaian', 'PenilaianController@index')->name('index');
     Route::get('/admin/penilaian/delete/{id}', 'PenilaianController@destroy')->name('delete');
     Route::get('/admin/penilaian/hasil-akhir', 'PenilaianController@exportView')->name('export');
+    Route::get('/admin/penilaian/hasil-akhir/export', 'PenilaianController@export')->name('export-excel');
 });
 
 Route::name('asesor.penilaian.')->group(function () {
