@@ -73,6 +73,8 @@
 
 				</table>
 
+				{{ $peserta->links() }}
+
 				</div>
 
 		</div>

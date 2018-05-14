@@ -9,7 +9,7 @@
         <ol>@each('asesor.detail-penilaian.rec-detail', $kom['children'], 'kom')</ol>
     @else
         <input type="hidden" name="id_komponen[]" value="{{$kom['id_komponen']}}">
-        <input type="number" name="skor[]">
+        <input type="number" name="skor[]" step="any" min="0" max="10">
 
     @endif
 </div>
@@ -24,7 +24,7 @@
 
     @else
         <input type="hidden" name="id_komponen[]" value="{{$kom['id_komponen']}}">
-        <input type="number" name="skor[]">
+        <input type="number" name="skor[]" step="any" min="0" max="10">
     
     @endif
     <hr>
@@ -39,7 +39,7 @@
 
     @else
         <input type="hidden" name="id_komponen[]" value="{{$kom['id_komponen']}}">
-        <input type="number" name="skor[]">
+        <input type="number" name="skor[]" step="any" min="0" max="10">
 
     @endif
 

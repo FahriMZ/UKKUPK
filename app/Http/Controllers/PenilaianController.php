@@ -34,9 +34,9 @@ class PenilaianController extends Controller
         if(isset($_GET['q'])) {
             $peserta = Peserta::where('id_tahun_ajar', $tahunAktif->id_tahun_ajar)
                                     ->where('nama', 'LIKE', '%'.$_GET['q'].'%')
-                                    ->get();
+                                    ->paginate(15);
         } else {
-            $peserta = Peserta::where('id_tahun_ajar', $tahunAktif->id_tahun_ajar)->get();
+            $peserta = Peserta::where('id_tahun_ajar', $tahunAktif->id_tahun_ajar)->paginate(15);
         }
 
         // $peserta = Peserta::first();
@@ -174,7 +174,7 @@ class PenilaianController extends Controller
 
                             foreach ($subSubKomponen as $key3 => $subSubKom) {
                                 if($subSubKom->detailPenilaian->count() > 0) {
-                                    $arrPenilaian[$keyPeserta][$komponen->id_komponen][] = Penilaian::join('detail_penilaian', 'detail_penilaian.id_penilaian', 'penilaian.id_penilaian')->where('id_komponen', $subSubKom->id_komponen)
+                                    $arrPenilaian[$keyPeserta][$komponen->id_komponen][$key2][] = Penilaian::join('detail_penilaian', 'detail_penilaian.id_penilaian', 'penilaian.id_penilaian')->where('id_komponen', $subSubKom->id_komponen)
                                             ->where('id_peserta', $peserta->id_peserta)
                                             ->first()['skor'];
                                 }
@@ -189,6 +189,8 @@ class PenilaianController extends Controller
 
         // dd($arrPenilaian);
 
+        // return $arrPenilaian;
+
         // Menambahkan id dan nama peserta ke array
         foreach ($pesertaDinilai as $key => $peserta) {
             $arrNilai[$key]['id_peserta'] = $peserta->id_peserta;
@@ -200,9 +202,22 @@ class PenilaianController extends Controller
             // $arrNilai[$key] = array_sum($komponen);
 
             foreach($komponen as $key2 => $sub) {
-
                 // Menghitung nilai komponen
-                $skor_perolehan = array_sum($sub);
+
+                if (count($sub) == count($sub, COUNT_RECURSIVE)) 
+                {
+                    // Jika tidak ada sub sub komponen
+                    $skor_perolehan = array_sum($sub);
+                }
+                else // Jika ada sub sub komponen
+                {
+                    $skor_perolehan = 0;
+                    foreach($sub as $k => $val) {
+                        $skor_perolehan += array_sum( (array) $val) / count($val);
+                    }
+                }
+
+                
                 $skor_maksimal = DetailKomponen::where('id_komponen', $key2)->first()['skor_maksimal'];
                 $bobot = DetailKomponen::where('id_komponen', $key2)->first()['bobot'];
 
@@ -230,6 +245,8 @@ class PenilaianController extends Controller
         $tahunAktif = TahunAktif::first();
 
         $arrNilai = $this->exportData();
+
+        // dd($arrNilai);
 
         if($arrNilai === 0) {
             return back()->with('notification', 'Tidak ada penilaian');
@@ -335,6 +352,10 @@ class PenilaianController extends Controller
 
         return back()->with('notification', 'Action completed');
 
+    }
+
+    public function sumArray($array) {
+        return array_sum($array);
     }
 
 }
