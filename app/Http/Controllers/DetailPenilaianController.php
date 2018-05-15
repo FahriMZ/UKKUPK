@@ -6,6 +6,7 @@ use Illuminate\Http\Request;
 
 use App\DetailPenilaian;
 use App\Penilaian;
+use App\Peserta;
 use App\Komponen;
 use URI;
 
@@ -80,18 +81,30 @@ class DetailPenilaianController extends Controller
      */
     public function show($id)
     {
+        $peserta = Peserta::findOrFail($id);
 
-       $detailPenilaian = Komponen::join('detail_penilaian', 'detail_penilaian.id_komponen', 'komponen.id_komponen')
+        if(isset($_GET['q'])) {
+            $detailPenilaian = Komponen::join('detail_penilaian', 'detail_penilaian.id_komponen', 'komponen.id_komponen')
                                 ->join('penilaian', 'penilaian.id_penilaian', 'detail_penilaian.id_penilaian')
                                 ->where('id_peserta', $id)
-                                ->select('komponen.id_komponen', 'komponen', 'parent_komponen', 'skor')
+                                ->select('komponen.id_komponen', 'komponen', 'parent_komponen', 'skor', 'id_detail_penilaian')
+                                ->where('komponen.komponen', 'LIKE', '%'.$_GET['q'].'%')
+                                ->orWhere('skor', 'LIKE', '%'.$_GET['q'].'%')
                                 // ->get();
-                                ->paginate(7);
+                                ->paginate(6);
+        } else {
+            $detailPenilaian = Komponen::join('detail_penilaian', 'detail_penilaian.id_komponen', 'komponen.id_komponen')
+                                ->join('penilaian', 'penilaian.id_penilaian', 'detail_penilaian.id_penilaian')
+                                ->where('id_peserta', $id)
+                                ->select('komponen.id_komponen', 'komponen', 'parent_komponen', 'skor', 'id_detail_penilaian')
+                                // ->get();
+                                ->paginate(6);
+        }
 
         // dd($detailPenilaian);
 
 
-        return view('asesor.detail-penilaian.show', compact('penilaian', 'detailPenilaian'));
+        return view('asesor.detail-penilaian.show', compact('peserta', 'detailPenilaian'));
     }
 
     /**
@@ -114,7 +127,11 @@ class DetailPenilaianController extends Controller
      */
     public function update(Request $request, $id)
     {
-        //
+        $detailPenilaian = DetailPenilaian::findOrFail($id);
+        $detailPenilaian->skor = $request->skor;
+        $detailPenilaian->save();
+
+        return back()->with('notification', 'Action Completed');
     }
 
     /**

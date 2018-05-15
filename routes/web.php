@@ -132,6 +132,7 @@ Route::name('asesor.penilaian.')->group(function () {
 Route::name('asesor.detail-penilaian.')->group(function () {
     Route::get('/asesor/detail-penilaian/create/{id}', 'DetailPenilaianController@create')->name('create');
     Route::post('/asesor/detail-penilaian/create/{id}', 'DetailPenilaianController@store')->name('store');
+    Route::post('/asesor/detail-penilaian/edit/{id}', 'DetailPenilaianController@update')->name('edit');
     Route::get('/asesor/penilaian/show/{id}', 'DetailPenilaianController@show')->name('show');
 });
 

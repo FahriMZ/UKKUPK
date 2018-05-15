@@ -45,7 +45,7 @@
 					<tbody>
 						@foreach($peserta as $key => $row)
 						<tr>
-							<td>{{++$key}}</td>
+							<td>{{$peserta->firstItem() + $key}}</td>
 							<td>{{$row->id_peserta}}</td>
 							<td>{{$row->nama}}</td>
 
