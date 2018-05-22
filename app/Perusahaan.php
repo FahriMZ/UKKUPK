@@ -30,7 +30,7 @@ class Perusahaan extends Model
     /**
      * @var array
      */
-    protected $fillable = ['nama_perusahaan', 'alamat_perusahaan', 'direktur_perusahaan'];
+    protected $fillable = ['nama_perusahaan', 'alamat_perusahaan', 'direktur_perusahaan', 'tipe_perusahaan'];
 
     /**
      * Indicates if the model should be timestamped.

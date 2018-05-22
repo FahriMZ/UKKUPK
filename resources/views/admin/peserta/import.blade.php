@@ -27,6 +27,8 @@
 				<button class="btn btn-primary">Upload</button>
 			</div>
 
+			<a href="{{ url()->previous() }}"><span class="fa fa-arrow-left"></span> Kembali</a>
+
 		</form>
 
 	</div>

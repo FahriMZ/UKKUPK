@@ -11,6 +11,8 @@
 
             <div class="card-body">
 
+                <a href="{{ url()->previous() }}"><span class="fa fa-arrow-left"></span> Kembali</a>
+                
                     <div class="form-group row">
                         <label for="nama" class="col-md-4 col-form-label text-md-right">{{ __('Nama') }}</label>
 

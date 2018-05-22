@@ -14,6 +14,8 @@
 
         <p class="card-subtitle">{{$indikator->komponen->komponen}}</p>
 
+        <a href="{{ url()->previous() }}"><span class="fa fa-arrow-left"></span> Kembali</a>
+
         <hr>
 
         <form method="POST" action="{{ route('admin.indikator.edit', $indikator->id_indikator) }}">

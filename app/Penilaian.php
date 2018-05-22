@@ -30,7 +30,7 @@ class Penilaian extends Model
     /**
      * @var array
      */
-    protected $fillable = ['id_asesor', 'id_peserta', 'paket_soal'];
+    protected $fillable = ['id_asesor', 'id_peserta', 'paket_soal', 'tipe_ukk'];
 
     /**
      * Indicates if the model should be timestamped.

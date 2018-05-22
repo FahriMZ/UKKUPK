@@ -15,6 +15,9 @@ use Auth;
 
 use PHPExcel_Worksheet_Drawing;
 
+// Untuk Pagination
+use Illuminate\Pagination\LengthAwarePaginator;
+
 class PenilaianController extends Controller
 {
 
@@ -66,11 +69,16 @@ class PenilaianController extends Controller
      */
     public function store(Request $request, $id)
     {
+    	$tipe_ukk = Auth::user()->asesor->perusahaan->tipe_perusahaan == 'internal' ? 'pra ukk' : 'real ukk';
+
+    	// dd($tipe_ukk);
+
         // Insert ke table penilaian
         $penilaian = Penilaian::create([
             'id_asesor'     => Auth::user()->asesor->id_asesor,
             'id_peserta'    => ''.$id.'',
-            'paket_soal'    => $request['paket_soal']
+            'paket_soal'    => $request['paket_soal'],
+            'tipe_ukk' 		=> $tipe_ukk
         ]);
 
         return redirect(route('asesor.detail-penilaian.create', $penilaian->id_penilaian));
@@ -118,7 +126,10 @@ class PenilaianController extends Controller
      */
     public function destroy($id)
     {
-        $penilaian = Penilaian::where('id_peserta', $id)->first();
+    	$tipe_ukk = Auth::user()->asesor->perusahaan->tipe_perusahaan == 'internal' ? 'pra ukk' : 'real ukk';
+        $penilaian = Penilaian::where('id_peserta', $id)
+        				->where('tipe_ukk', $tipe_ukk)
+        				->first();
 
         $penilaian->delete();
 
@@ -127,17 +138,20 @@ class PenilaianController extends Controller
 
 
     // Memproses semua nilai akhir
-    public function exportData() {
-
+    public function exportData($tipe_ukk = 'pra ukk') {
+        // dd($data_peserta);
         $komponenUtama = Komponen::where('parent_komponen', null)->get();
 
 
         $penilaian = Penilaian::join('detail_penilaian', 'detail_penilaian.id_penilaian', 'penilaian.id_penilaian')
                         ->join('peserta', 'penilaian.id_peserta', 'peserta.id_peserta')
                         ->where('peserta.id_tahun_ajar', TahunAktif::first()['id_tahun_ajar'])
+                        ->where('penilaian.tipe_ukk', $tipe_ukk)
+                        // ->where('peserta.nama', 'LIKE', '%'.$data_peserta.'%')
+                        // ->orWhere('peserta.id_peserta', 'LIKE', '%'.$data_peserta.'%')
                         ->get();
 
-        // dd($penilaian->count() === 0 ?: 'error');
+        // dd($penilaian);
 
         if($penilaian->count() === 0) {
             return 0;
@@ -151,6 +165,7 @@ class PenilaianController extends Controller
 
         $pesertaDinilai = Peserta::join('penilaian', 'peserta.id_peserta', 'penilaian.id_peserta')
                             ->where('peserta.id_tahun_ajar', TahunAktif::first()['id_tahun_ajar'])
+                            ->where('penilaian.tipe_ukk', $tipe_ukk)
                             ->get();
 
         foreach ($pesertaDinilai as $keyPeserta => $peserta) {
@@ -159,6 +174,7 @@ class PenilaianController extends Controller
                 if($komponen->detaiPenilaian) {
                     $arrPenilaian[$keyPeserta][$komponen->id_komponen][] = $penilaian->where('id_komponen', $komponen->id_komponen)
                                                                         ->where('id_peserta', $peserta->id_peserta)
+                                                                        ->where('penilaian.tipe_ukk', $tipe_ukk)
                                                                         ->first()['skor'];
                 } else {
                     $subKomponen = Komponen::where('parent_komponen', $komponen->id_komponen)->get();
@@ -167,6 +183,7 @@ class PenilaianController extends Controller
                         if($subKom->detailPenilaian->count() > 0) {
                             $arrPenilaian[$keyPeserta][$komponen->id_komponen][] = Penilaian::join('detail_penilaian', 'detail_penilaian.id_penilaian', 'penilaian.id_penilaian')->where('id_komponen', $subKom->id_komponen)
                                     ->where('id_peserta', $peserta->id_peserta)
+                                    ->where('penilaian.tipe_ukk', $tipe_ukk)
                                     ->first()['skor'];
                         } else {
 
@@ -176,6 +193,7 @@ class PenilaianController extends Controller
                                 if($subSubKom->detailPenilaian->count() > 0) {
                                     $arrPenilaian[$keyPeserta][$komponen->id_komponen][$key2][] = Penilaian::join('detail_penilaian', 'detail_penilaian.id_penilaian', 'penilaian.id_penilaian')->where('id_komponen', $subSubKom->id_komponen)
                                             ->where('id_peserta', $peserta->id_peserta)
+                                            ->where('penilaian.tipe_ukk', $tipe_ukk)
                                             ->first()['skor'];
                                 }
                             }
@@ -244,6 +262,15 @@ class PenilaianController extends Controller
 
         $tahunAktif = TahunAktif::first();
 
+        // dd($tahunAktif);
+
+        // if(isset($_GET['q']) && $_GET['q'] != '') {
+            // return $_GET['q'];
+            // $arrNilai = $this->exportData($_GET['q']);
+        // } else {
+            // $arrNilai = $this->exportData();
+        // }
+        
         $arrNilai = $this->exportData();
 
         // dd($arrNilai);
@@ -251,6 +278,55 @@ class PenilaianController extends Controller
         if($arrNilai === 0) {
             return back()->with('notification', 'Tidak ada penilaian');
         }
+
+        // Mengubah integer 0 ke string 0
+        // foreach ($arrNilai as $key => $value) {
+        //     foreach($value['nilai'] as $Key2 => $nilai) {
+        //         if($nilai == 0) {
+        //             $nilai = (float) $nilai;
+        //         }
+        //     }
+        // }
+
+        // paginate hasil
+        $arrNilai = $this->paginateArray($arrNilai, 5);
+
+        return view('admin.penilaian.export', compact('tahunAktif', 'komponenUtama', 'arrNilai'));
+    }
+
+    public function exportViewRealUkk() {
+        $komponenUtama = Komponen::where('parent_komponen', null)->get();
+
+        $tahunAktif = TahunAktif::first();
+
+        // dd($tahunAktif);
+
+        // if(isset($_GET['q']) && $_GET['q'] != '') {
+            // return $_GET['q'];
+            // $arrNilai = $this->exportData($_GET['q']);
+        // } else {
+            // $arrNilai = $this->exportData();
+        // }
+        
+        $arrNilai = $this->exportData('real ukk');
+
+        // dd($arrNilai);
+
+        if($arrNilai === 0) {
+            return back()->with('notification', 'Tidak ada penilaian');
+        }
+
+        // Mengubah integer 0 ke string 0
+        // foreach ($arrNilai as $key => $value) {
+        //     foreach($value['nilai'] as $Key2 => $nilai) {
+        //         if($nilai == 0) {
+        //             $nilai = (float) $nilai;
+        //         }
+        //     }
+        // }
+
+        // paginate hasil
+        $arrNilai = $this->paginateArray($arrNilai, 5);
 
         return view('admin.penilaian.export', compact('tahunAktif', 'komponenUtama', 'arrNilai'));
     }
@@ -264,11 +340,17 @@ class PenilaianController extends Controller
 
 
     // Export ke excel
-    public function export() {
 
-        \Excel::create('PENILAIAN_UJIAN_PRAKTIK_KEJURUAN_'.date('d_m_Y'), function($excel) {
+    public function exportRealUkk() {
+        $this->export('real ukk');
+    }
 
-            $arrNilai = $this->exportData();
+
+    public function export($tipe_ukk) {
+
+        \Excel::create('PENILAIAN_UJIAN_PRAKTIK_KEJURUAN_'.date('d_m_Y'), function($excel) use ($tipe_ukk) {
+
+            $arrNilai = $this->exportData($tipe_ukk);
 
             // Konversi array multi dimensi ke satu dimensi
             foreach($arrNilai as $key => $peserta) {
@@ -356,6 +438,24 @@ class PenilaianController extends Controller
 
     public function sumArray($array) {
         return array_sum($array);
+    }
+
+    // Untuk pagination array
+    public function paginateArray(Array $collection, $page) {
+        // Get current page form url e.x. &page=1
+        $currentPage = LengthAwarePaginator::resolveCurrentPage();
+        // Create a new Laravel collection from the array data
+        $itemCollection = collect($collection);
+        // Define how many items we want to be visible in each page
+        $perPage = $page;
+        // Slice the collection to get the items to display in current page
+        $currentPageItems = $itemCollection->slice(($currentPage * $perPage) - $perPage, $perPage)->all();
+        // Create our paginator and pass it to the view
+        $paginatedItems= new LengthAwarePaginator($currentPageItems , count($itemCollection), $perPage);
+        // set url path for generted links
+        $paginatedItems->setPath(url()->current());
+
+        return $paginatedItems;
     }
 
 }

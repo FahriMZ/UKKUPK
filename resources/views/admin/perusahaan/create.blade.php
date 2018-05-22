@@ -28,7 +28,19 @@
                     <input type="text" name="direktur_perusahaan" class="form-control">
                 </div>
 
+                <div class="form-group">
+                    <div class="checkbox">
+                        <label>
+                            <input type="checkbox" name="tipe_perusahaan" {{ old('tipe_perusahaan') ? 'checked' : '' }}> {{ __('Atur sebagai internal') }}
+                        </label>
+                    </div>
+                </div>
+
                 <button class="btn btn-primary">Save</button>
+
+                <br>
+
+                <a href="{{ url()->previous() }}"><span class="fa fa-arrow-left"></span> Kembali</a>
             </div>
         </div>
     </div>

@@ -47,7 +47,17 @@ class PerusahaanController extends Controller
      */
     public function store(Request $request)
     {
-        Perusahaan::create($request->all());
+        // dd($request->all());
+
+        Perusahaan::create([
+
+            'nama_perusahaan'       => $request->nama_perusahaan,
+            'alamat_perusahaan'     => $request->alamat_perusahaan,
+            'direktur_perusahaan'   => $request->direktur_perusahaan,
+            'tipe_perusahaan'       => $request->tipe_perusahaan == 'on' ? 'internal' : 'eksternal'
+
+        ]);
+
 
         return redirect(route('admin.perusahaan.index'))->with('notification', 'Action Completed');
     }
@@ -84,7 +94,14 @@ class PerusahaanController extends Controller
      */
     public function update(Request $request, $id)
     {
-        Perusahaan::findOrFail($id)->update($request->all());
+        Perusahaan::findOrFail($id)->update([
+
+            'nama_perusahaan'       => $request->nama_perusahaan,
+            'alamat_perusahaan'     => $request->alamat_perusahaan,
+            'direktur_perusahaan'   => $request->direktur_perusahaan,
+            'tipe_perusahaan'       => $request->tipe_perusahaan == 'on' ? 'internal' : 'eksternal'
+
+        ]);
 
         return redirect(route('admin.perusahaan.index'))->with('notification', 'Action Completed');
     }

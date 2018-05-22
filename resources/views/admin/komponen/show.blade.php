@@ -13,6 +13,7 @@
 <div class="container-fluid row justify-content-center">
     
     <div class="card card-body col-9">
+        <a href="{{ route('admin.komponen.index') }}"><span class="fa fa-arrow-left"></span> Kembali</a>
 
         <h4 class="card-title">Komponen</h4>
         <p class="card-subtitle pb-2">

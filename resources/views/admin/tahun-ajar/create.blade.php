@@ -24,6 +24,10 @@
                 </div>
 
                 <button class="btn btn-primary">Save</button>
+
+                <br>
+
+                <a href="{{ url()->previous() }}"><span class="fa fa-arrow-left"></span> Kembali</a>
             </div>
         </div>
     </div>

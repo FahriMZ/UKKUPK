@@ -9,6 +9,7 @@ use App\Penilaian;
 use App\Peserta;
 use App\Komponen;
 use URI;
+use Config;
 
 class DetailPenilaianController extends Controller
 {
@@ -48,7 +49,6 @@ class DetailPenilaianController extends Controller
      */
     public function store(Request $request, $id)
     {
-
         $skor = $request->skor;
         $id_komponen = $request->id_komponen;
 
@@ -64,10 +64,14 @@ class DetailPenilaianController extends Controller
             $data = array(
                 'id_penilaian'  => $id,
                 'id_komponen'   => $id_komponen[$r],
-                'skor'          => $skor[$r]
+                'skor'          => $skor[$r] == null ? 0 : $skor[$r]
             );
 
             DetailPenilaian::create($data);
+        }
+
+        if(in_array(null, $request->skor)) {
+            return redirect(route('asesor.penilaian.index'))->with('notification', 'Penilaian disimpan. Skor yang dikosongkan dianggap 0');
         }
 
         return redirect(route('asesor.penilaian.index'))->with('notification', 'Action Completed');
@@ -83,28 +87,56 @@ class DetailPenilaianController extends Controller
     {
         $peserta = Peserta::findOrFail($id);
 
-        if(isset($_GET['q'])) {
-            $detailPenilaian = Komponen::join('detail_penilaian', 'detail_penilaian.id_komponen', 'komponen.id_komponen')
+        if(isset($_GET['q']) && $_GET['q'] != '') {
+
+            $detailPenilaian_praukk = Komponen::join('detail_penilaian', 'detail_penilaian.id_komponen', 'komponen.id_komponen')
                                 ->join('penilaian', 'penilaian.id_penilaian', 'detail_penilaian.id_penilaian')
                                 ->where('id_peserta', $id)
-                                ->select('komponen.id_komponen', 'komponen', 'parent_komponen', 'skor', 'id_detail_penilaian')
+                                ->where('penilaian.tipe_ukk', 'pra ukk')
+                                ->select('komponen.id_komponen', 'komponen', 'parent_komponen', 'skor', 'id_detail_penilaian', 'id_peserta')
                                 ->where('komponen.komponen', 'LIKE', '%'.$_GET['q'].'%')
                                 ->orWhere('skor', 'LIKE', '%'.$_GET['q'].'%')
                                 // ->get();
-                                ->paginate(6);
-        } else {
-            $detailPenilaian = Komponen::join('detail_penilaian', 'detail_penilaian.id_komponen', 'komponen.id_komponen')
+                                ->paginate(5);
+
+            $detailPenilaian_realukk = Komponen::join('detail_penilaian', 'detail_penilaian.id_komponen', 'komponen.id_komponen')
                                 ->join('penilaian', 'penilaian.id_penilaian', 'detail_penilaian.id_penilaian')
                                 ->where('id_peserta', $id)
-                                ->select('komponen.id_komponen', 'komponen', 'parent_komponen', 'skor', 'id_detail_penilaian')
+                                ->where('penilaian.tipe_ukk', 'real ukk')
+                                ->select('komponen.id_komponen', 'komponen', 'parent_komponen', 'skor', 'id_detail_penilaian', 'id_peserta')
+                                ->where('komponen.komponen', 'LIKE', '%'.$_GET['q'].'%')
+                                ->orWhere('skor', 'LIKE', '%'.$_GET['q'].'%')
                                 // ->get();
-                                ->paginate(6);
+                                ->paginate(5);
+        } else {
+            $detailPenilaian_praukk = Komponen::join('detail_penilaian', 'detail_penilaian.id_komponen', 'komponen.id_komponen')
+                                ->join('penilaian', 'penilaian.id_penilaian', 'detail_penilaian.id_penilaian')
+                                ->where('id_peserta', $id)
+                                ->where('penilaian.tipe_ukk', 'pra ukk')
+                                ->select('komponen.id_komponen', 'komponen', 'parent_komponen', 'skor', 'id_detail_penilaian', 'id_peserta')
+                                // ->get();
+                                ->paginate(5);
+
+            $detailPenilaian_realukk = Komponen::join('detail_penilaian', 'detail_penilaian.id_komponen', 'komponen.id_komponen')
+                                ->join('penilaian', 'penilaian.id_penilaian', 'detail_penilaian.id_penilaian')
+                                ->where('id_peserta', $id)
+                                ->where('penilaian.tipe_ukk', 'real ukk')
+                                ->select('komponen.id_komponen', 'komponen', 'parent_komponen', 'skor', 'id_detail_penilaian', 'id_peserta')
+                                // ->get();
+                                ->paginate(5);
+
+            // return $detailPenilaian_realukk;
+            // return $detailPenilaian_praukk;
+
+            // Config::set('constant.link_sebelumnya', url()->previous());
         }
 
+        // $link_sebelumnya = Config::get('constant.link_sebelumnya');
         // dd($detailPenilaian);
 
 
-        return view('asesor.detail-penilaian.show', compact('peserta', 'detailPenilaian'));
+        // return view('asesor.detail-penilaian.show', compact('peserta', 'detailPenilaian', 'link_sebelumnya'));
+        return view('asesor.detail-penilaian.show', compact('peserta', 'detailPenilaian_realukk', 'detailPenilaian_praukk'));
     }
 
     /**

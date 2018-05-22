@@ -7,7 +7,8 @@
 @section('content')
 
 @if(Auth::user()->akses == 'administrator')
-	<a href="{{ route('admin.penilaian.export') }}" class="btn btn-outline-success add">Lihat hasil akhir</a>
+	<a href="{{ route('admin.penilaian.exportReal') }}" class="btn btn-outline-success add">Lihat hasil akhir (Real UKK)</a>
+	<a href="{{ route('admin.penilaian.export') }}" class="btn btn-success add-two">Lihat hasil akhir (Pra UKK)</a>
 @endif
 
 
@@ -53,7 +54,6 @@
 							<td>
 								<div class="btn-group">
 								<a href="{{route('asesor.detail-penilaian.show', $row->id_peserta)}}" class="btn btn-info"><span class="fa fa-eye"></span> Lihat Penilaian</a>
-								<a href="{{route('asesor.penilaian.delete', $row->id_peserta)}}" class="btn btn-danger remove"><span class="fa fa-trash"></span> Hapus Penilaian</a>
 								</div>
 							</td>
 

@@ -6,6 +6,7 @@
 <div class="container">
     
     <div class="card card-body mb-3">
+        <a href="{{ url()->previous() }}"><span class="fa fa-arrow-left"></span> Kembali</a>
         <h3 class="card-title">Asesor</h3>
 
         <ul class="nav nav-pills" id="pills-tab" role="tablist">
@@ -53,6 +54,10 @@
                     <tr>
                         <td>Email</td>
                         <td>{{ $asesor->user->email }}</td>
+                    </tr>
+                    <tr>
+                        <td>Asal Asesor</td>
+                        <td>{{ strtoupper($asesor->perusahaan->tipe_perusahaan) }}</td>
                     </tr>
                     <tr>
                         <td>Perusahaan</td>

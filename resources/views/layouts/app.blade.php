@@ -28,7 +28,7 @@
     .add-two {
         position: fixed;
         bottom: 35px;
-        right: 175px;
+        right: 255px;
         z-index: 1000;
     }
 

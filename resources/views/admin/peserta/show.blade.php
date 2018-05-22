@@ -3,6 +3,9 @@
 @section('content')
 <div class="container-fluid">
     <div class="card card-body mb-3">
+        
+        <a href="{{ url()->previous() }}"><span class="fa fa-arrow-left"></span> Kembali</a>
+        
         <h4 class="card-title">
             {{ $peserta->nama }}
             <div class="float-right">
@@ -10,6 +13,7 @@
                 <a href="{{ route('admin.peserta.delete', $peserta->id_peserta) }}" class="btn btn-danger remove"><span class="fa fa-trash"></span> Hapus</a>
             </div>
         </h4>
+        
 
         <div class="table-responsive">
             <table class="table table-hover table-bordered">

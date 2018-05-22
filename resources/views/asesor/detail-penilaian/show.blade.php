@@ -3,55 +3,161 @@
 @section('content')
 
 <div class="container">
-	@if($detailPenilaian)
 
-	<div class="card card-body">
-
-        
-
+    <div class="card card-body mb-3">
         <div class="card-title row">
             <div class="col">
+                <a href="{{ route('asesor.penilaian.index') }}"><span class="fa fa-arrow-left"></span> Kembali</a>
                 <h3>Detail Penilaian</h3>
                 <p class="card-subtitle text-info">{{ $peserta->nama }}</p>
-                <br>
 
                 @if(isset($_GET['q']) && $_GET['q'] != '')
                 <code>hasil pencarian : "{{ $_GET['q'] }}"</code>
                 @endif
+
+                <br>
+
             </div>
 
-            <form method="GET" action="{{ route('asesor.detail-penilaian.show', $peserta->id_peserta) }}">
-                <div class="col form-group">
-                    <input type="text" name="q" class="form-control" placeholder="Cari komponen/skor..">
+            <div class="col-md-3">
+                <form method="GET" action="{{ route('asesor.detail-penilaian.show', $peserta->id_peserta) }}">
+                    <div class="col form-group">
+                        <input type="text" name="q" class="form-control" placeholder="Cari komponen/skor..">
+                    </div>
+                </form>
+            </div>
+
+            <div class="col-md-12">
+                
+                <ul class="nav nav-pills" id="pills-tab" role="tablist">
+                    <li class="nav-item">
+                        <a href="#pills-home" class="nav-link active" id="pills-home-tab" data-toggle="pill" role="tab" aria-controls="pills-home" aria-selected="true">Pra UKK</a>
+                    </li>
+                    <li class="nav-item">
+                        <a href="#pills-about" class="nav-link" id="pills-about-tab" data-toggle="pill" role="tab" aria-controls="pills-about" aria-selected="true">Real UKK</a>
+                    </li>
+                    <li class="nav-item">
+                        @if(Auth::user()->akses == 'asesor' && Auth::user()->asesor->perusahaan->tipe_perusahaan == 'eksternal')
+                        
+                        <a href="{{route('asesor.penilaian.delete', $peserta->id_peserta)}}" class="nav-link text-danger remove"><span class="fa fa-trash"></span> Hapus Penilaian Real UKK</a>
+
+                        @elseif(Auth::user()->akses == 'asesor' && Auth::user()->asesor->perusahaan->tipe_perusahaan == 'internal')
+
+                        <a href="{{route('asesor.penilaian.delete', $peserta->id_peserta)}}" class="nav-link text-danger remove"><span class="fa fa-trash"></span> Hapus Penilaian Pra UKK</a>
+
+                        @endif
+
+
+                    </li>
+                </ul>
+
+            </div>
+
+        </div>
+    </div>
+
+    {{-- ISI --}}
+
+    <div class="tab-content" id="pills-tabContent">
+
+        <div class="tab-pane fade show active" id="pills-home" role="tab-panel" aria-labelledby="pills-home-tab">
+                
+            <div class="card card-body">
+
+                @if($detailPenilaian_praukk->count() > 0)
+
+                <div class="table-responsive">
+                    <table class="table">
+                        <thead>
+                            <th>#</th>
+                            <th>Komponen</th>
+                            <th>Parent Komponen</th>
+                            <th colspan="2">Skor</th>
+                        </thead>
+                        <tbody>
+
+                            @foreach($detailPenilaian_praukk as $key => $komponen)
+                            <tr>
+                                <td>{{ $detailPenilaian_praukk->firstItem() + $key}}</td>
+                                <td>{{$komponen->komponen}}</td>
+                                <td>{{$komponen->parent->komponen}}</td>
+                                <td>{{$komponen->skor}}</td>
+                                <td><button data-komponen="{{$komponen->komponen}}" data-skor="{{ $komponen->skor }}" data-url="{{route('asesor.detail-penilaian.edit', $komponen->id_detail_penilaian)}}" class="btn btn-sm btn-warning editSkor"><span class="fa fa-edit"></span></button></td>
+                            </tr>
+                            @endforeach
+                        </tbody>
+                    </table>
+
+                    <div class="float-right">
+                        {{ $detailPenilaian_praukk->render() }}
+                    </div>
                 </div>
-            </form>
+
+                @else 
+
+                    <h5>Belum ada penilaian untuk pra ukk.</h5>
+
+                    @if(Auth::user()->akses == 'asesor' && Auth::user()->asesor->perusahaan->tipe_perusahaan == 'internal')
+
+                    <a href="{{route('asesor.penilaian.create', $peserta->id_peserta)}}"><span class="fa fa-plus"></span> Buat Penilaian</a>
+
+                    @endif
+
+                @endif
+            </div>
+
         </div>
 
-        <div class="table-responsive">
-            <table class="table">
-                <thead>
-                    <th>#</th>
-                    <th>Komponen</th>
-                    <th>Parent Komponen</th>
-                    <th colspan="2">Skor</th>
-                </thead>
-                <tbody>
+        <div class="tab-pane fade" id="pills-about" role="tab-panel" aria-labelledby="pills-about-tab">
+            
+            <div class="card card-body">
 
-                    @foreach($detailPenilaian as $key => $komponen)
-                    <tr>
-                        <td>{{ $detailPenilaian->firstItem() + $key}}</td>
-                        <td>{{$komponen->komponen}}</td>
-                        <td>{{$komponen->parent->komponen}}</td>
-                        <td>{{$komponen->skor}}</td>
-                        <td><button data-komponen="{{$komponen->komponen}}" data-skor="{{ $komponen->skor }}" data-url="{{route('asesor.detail-penilaian.edit', $komponen->id_detail_penilaian)}}" class="btn btn-sm btn-warning editSkor"><span class="fa fa-edit"></span></button></td>
-                    </tr>
-                    @endforeach
-                </tbody>
-            </table>
+                @if($detailPenilaian_realukk->count() > 0)
+                <div class="table-responsive">
+                    <table class="table">
+                        <thead>
+                            <th>#</th>
+                            <th>Komponen</th>
+                            <th>Parent Komponen</th>
+                            <th colspan="2">Skor</th>
+                        </thead>
+                        <tbody>
 
-            {{ $detailPenilaian->render() }}
+                            @foreach($detailPenilaian_realukk as $key => $komponen)
+                            <tr>
+                                <td>{{ $detailPenilaian_realukk->firstItem() + $key}}</td>
+                                <td>{{$komponen->komponen}}</td>
+                                <td>{{$komponen->parent->komponen}}</td>
+                                <td>{{$komponen->skor}}</td>
+                                <td><button data-komponen="{{$komponen->komponen}}" data-skor="{{ $komponen->skor }}" data-url="{{route('asesor.detail-penilaian.edit', $komponen->id_detail_penilaian)}}" class="btn btn-sm btn-warning editSkor"><span class="fa fa-edit"></span></button></td>
+                            </tr>
+                            @endforeach
+                        </tbody>
+                    </table>
+
+                    <div class="float-right">
+                        {{ $detailPenilaian_realukk->render() }}
+                    </div>
+                </div>
+
+                @else 
+
+                <h5>Belum ada penilaian untuk real ukk.</h5>
+                @if(Auth::user()->akses == 'asesor' && Auth::user()->asesor->perusahaan->tipe_perusahaan == 'eksternal')
+
+                <a href="{{route('asesor.penilaian.create', $peserta->id_peserta)}}"><span class="fa fa-plus"></span> Buat Penilaian</a>
+
+                @endif
+
+                @endif
+
+            </div>
+            
+
         </div>
 
+    </div>
+</div>
 
         <!-- Modal edit detail -->
         <div class="modal fade" id="editSkor" tabindex="-1" role="dialog" aria-hidden="true">
@@ -83,11 +189,6 @@
         </div>
 
         <!-- END modal -->
-
-
-     </div>
-    @endif
-</div>
 
 @stop
 
