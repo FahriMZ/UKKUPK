@@ -231,7 +231,7 @@ class PenilaianController extends Controller
                 {
                     $skor_perolehan = 0;
                     foreach($sub as $k => $val) {
-                        $skor_perolehan += array_sum( (array) $val) / count($val);
+                        $skor_perolehan += array_sum( (array) $val) / @count($val);
                     }
                 }
 
@@ -346,7 +346,7 @@ class PenilaianController extends Controller
     }
 
 
-    public function export($tipe_ukk) {
+    public function export($tipe_ukk = 'pra ukk') {
 
         \Excel::create('PENILAIAN_UJIAN_PRAKTIK_KEJURUAN_'.date('d_m_Y'), function($excel) use ($tipe_ukk) {
 
