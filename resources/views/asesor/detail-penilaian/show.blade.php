@@ -85,7 +85,7 @@
                                 <td>{{$komponen->parent->komponen}}</td>
                                 <td>{{$komponen->skor}}</td>
                                 
-                                @if(Auth::user()->hak_akses == 'asesor' && Auth::user()->asesor->id_asesor == $asesor->where('tipe_ukk', 'pra ukk')->first()['id_asesor'])
+                                @if(Auth::user()->akses == 'asesor' && Auth::user()->asesor->id_asesor == $asesor->where('tipe_ukk', 'pra ukk')->first()['id_asesor'])
 
                                 <td><button data-komponen="{{$komponen->komponen}}" data-skor="{{ $komponen->skor }}" data-url="{{route('asesor.detail-penilaian.edit', $komponen->id_detail_penilaian)}}" class="btn btn-sm btn-warning editSkor"><span class="fa fa-edit"></span></button></td>
 
@@ -141,7 +141,7 @@
                                 <td>{{$komponen->parent->komponen}}</td>
                                 <td>{{$komponen->skor}}</td>
 
-                                @if(Auth::user()->hak_akses == 'asesor' && Auth::user()->asesor->id_asesor == $asesor->where('tipe_ukk', 'real ukk')->first()['id_asesor'])
+                                @if(Auth::user()->akses == 'asesor' && Auth::user()->asesor->id_asesor == $asesor->where('tipe_ukk', 'real ukk')->first()['id_asesor'])
 
                                 <td><button data-komponen="{{$komponen->komponen}}" data-skor="{{ $komponen->skor }}" data-url="{{route('asesor.detail-penilaian.edit', $komponen->id_detail_penilaian)}}" class="btn btn-sm btn-warning editSkor"><span class="fa fa-edit"></span></button></td>
 

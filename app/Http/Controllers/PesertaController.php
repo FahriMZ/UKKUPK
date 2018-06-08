@@ -7,6 +7,7 @@ use Illuminate\Http\Request;
 use App\Peserta;
 use App\TahunAjar;
 use App\TahunAktif;
+use App\Kelas;
 
 use Excel;
 
@@ -46,7 +47,8 @@ class PesertaController extends Controller
     public function create()
     {
         $tahunAjar = TahunAjar::all();
-        return view('admin.peserta.create', compact('tahunAjar'));
+        $kelas = Kelas::all();
+        return view('admin.peserta.create', compact('tahunAjar', 'kelas'));
     }
 
     /**
@@ -57,6 +59,8 @@ class PesertaController extends Controller
      */
     public function store(Request $data)
     {
+        // dd($data->all());
+
         Peserta::create([
             'id_peserta'        => $data['id_peserta'],
             'nama'              => $data['nama'],
@@ -65,6 +69,7 @@ class PesertaController extends Controller
             'alamat'            => $data['alamat'],
             'kontak'            => $data['kontak'],
             'email'             => $data['email'],
+            'id_kelas'     => $data['id_kelas'],
             'id_tahun_ajar'     => $data['id_tahun_ajar']
         ]);
 
@@ -93,7 +98,8 @@ class PesertaController extends Controller
     {
         $peserta = Peserta::findOrFail($id);
         $tahunAjar = TahunAjar::all();
-        return view('admin.peserta.edit', compact('peserta', 'tahunAjar'));
+        $kelas = Kelas::all();
+        return view('admin.peserta.edit', compact('peserta', 'tahunAjar', 'kelas'));
     }
 
     /**
@@ -112,6 +118,7 @@ class PesertaController extends Controller
             'alamat'            => $data['alamat'],
             'kontak'            => $data['kontak'],
             'email'             => $data['email'],
+            'id_kelas'             => $data['id_kelas'],
             'id_tahun_ajar'     => $data['id_tahun_ajar']
         ]);
 

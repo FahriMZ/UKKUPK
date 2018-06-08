@@ -106,12 +106,30 @@
                     </div>
 
                     <div class="form-group row">
+                        <label for="id_kelas" class="col-md-4 col-form-label text-md-right">{{ __('Tahun ajaran') }}</label>
+
+                        <div class="col-md-6">
+                            <select name="id_kelas" class="form-control">
+                                @foreach($kelas as $kelasnya)
+                                <option value="{{$kelasnya->id_kelas}}" {{ $peserta->id_kelas == $kelasnya->id_kelas ? 'selected' : '' }}  >{{$kelasnya->nama_kelas}}</option>
+                                @endforeach
+                            </select>
+
+                            @if ($errors->has('id_kelas'))
+                                <span class="invalid-feedback">
+                                    <strong>{{ $errors->first('id_kelas') }}</strong>
+                                </span>
+                            @endif
+                        </div>
+                    </div>
+
+                    <div class="form-group row">
                         <label for="id_tahun_ajar" class="col-md-4 col-form-label text-md-right">{{ __('Tahun ajaran') }}</label>
 
                         <div class="col-md-6">
                             <select name="id_tahun_ajar" class="form-control">
                                 @foreach($tahunAjar as $tahun)
-                                <option value="{{$tahun->id_tahun_ajar}}">{{$tahun->tahun_ajar}}</option>
+                                <option value="{{$tahun->id_tahun_ajar}}" {{ $peserta->id_tahun_ajar == $tahun->id_tahun_ajar ? 'selected' : '' }} >{{$tahun->tahun_ajar}}</option>
                                 @endforeach
                             </select>
 

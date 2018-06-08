@@ -11,7 +11,7 @@
 		<div class="card-body">
 			
 			<h4 class="card-title">
-		        Penilaian | Peserta
+		        Penilaian | <span class="text-info">{{ $peserta->nama }}</span>
 		    </h4>
 
 		    <br>
@@ -26,8 +26,8 @@
 		                </tr>
 
 		                <tr>
-		                	<td>Nama</td>
-		                	<td>{{ $peserta->nama }}</td>
+		                	<td>Kelas</td>
+		                	<td>{{ $peserta->kelas->nama_kelas }}</td>
 		                </tr>
 
 		                <tr>

@@ -48,7 +48,7 @@ class Peserta extends Model
     /**
      * @var array
      */
-    protected $fillable = ['id_tahun_ajar', 'nama', 'alamat', 'jenis_kelamin', 'tanggal_lahir', 'email', 'kontak', 'id_peserta'];
+    protected $fillable = ['id_tahun_ajar', 'nama', 'alamat', 'jenis_kelamin', 'tanggal_lahir', 'email', 'kontak', 'id_peserta', 'id_kelas'];
 
     /**
      * Indicates if the model should be timestamped.
@@ -67,5 +67,9 @@ class Peserta extends Model
 
     public function penilaian() {
         return $this->hasMany('App\Penilaian', 'id_peserta');
+    }
+
+    public function kelas() {
+        return $this->belongsTo('App\Kelas', 'id_kelas');
     }
 }

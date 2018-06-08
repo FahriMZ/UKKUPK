@@ -42,6 +42,10 @@
                     <td>{{ $peserta->kontak }}</td>
                 </tr>
                 <tr>
+                    <td>Kelas</td>
+                    <td>{{ $peserta->kelas->nama_kelas }}</td>
+                </tr>
+                <tr>
                     <td>Tahun Ajar</td>
                     <td>{{ $peserta->tahunAjar->tahun_ajar }}</td>
                 </tr>
