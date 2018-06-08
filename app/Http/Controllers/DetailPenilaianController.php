@@ -7,8 +7,10 @@ use Illuminate\Http\Request;
 use App\DetailPenilaian;
 use App\Penilaian;
 use App\Peserta;
+use App\Asesor;
 use App\Komponen;
 use URI;
+use Auth;
 use Config;
 
 class DetailPenilaianController extends Controller
@@ -85,7 +87,12 @@ class DetailPenilaianController extends Controller
      */
     public function show($id)
     {
+        // dd(Auth::user()->asesor->id_asesor);
         $peserta = Peserta::findOrFail($id);
+
+        $asesor = Asesor::join('penilaian', 'asesor.id_asesor', 'penilaian.id_asesor')->where('id_peserta', $id)->get();
+
+        // dd($asesor);
 
         if(isset($_GET['q']) && $_GET['q'] != '') {
 
@@ -136,7 +143,7 @@ class DetailPenilaianController extends Controller
 
 
         // return view('asesor.detail-penilaian.show', compact('peserta', 'detailPenilaian', 'link_sebelumnya'));
-        return view('asesor.detail-penilaian.show', compact('peserta', 'detailPenilaian_realukk', 'detailPenilaian_praukk'));
+        return view('asesor.detail-penilaian.show', compact('peserta', 'detailPenilaian_realukk', 'detailPenilaian_praukk', 'asesor'));
     }
 
     /**

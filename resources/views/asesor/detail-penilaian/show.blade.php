@@ -66,6 +66,8 @@
 
                 @if($detailPenilaian_praukk->count() > 0)
 
+                <h5>Asesor : </h5><p>{{ $asesor->where('tipe_ukk', 'pra ukk')->first()['nama'] }}</p>
+
                 <div class="table-responsive">
                     <table class="table">
                         <thead>
@@ -82,7 +84,13 @@
                                 <td>{{$komponen->komponen}}</td>
                                 <td>{{$komponen->parent->komponen}}</td>
                                 <td>{{$komponen->skor}}</td>
+                                
+                                @if(Auth::user()->hak_akses == 'asesor' && Auth::user()->asesor->id_asesor == $asesor->where('tipe_ukk', 'pra ukk')->first()['id_asesor'])
+
                                 <td><button data-komponen="{{$komponen->komponen}}" data-skor="{{ $komponen->skor }}" data-url="{{route('asesor.detail-penilaian.edit', $komponen->id_detail_penilaian)}}" class="btn btn-sm btn-warning editSkor"><span class="fa fa-edit"></span></button></td>
+
+                                @endif
+
                             </tr>
                             @endforeach
                         </tbody>
@@ -113,6 +121,9 @@
             <div class="card card-body">
 
                 @if($detailPenilaian_realukk->count() > 0)
+
+                <h5>Asesor : </h5><p>{{ $asesor->where('tipe_ukk', 'real ukk')->first()['nama'] }}</p>
+
                 <div class="table-responsive">
                     <table class="table">
                         <thead>
@@ -129,7 +140,12 @@
                                 <td>{{$komponen->komponen}}</td>
                                 <td>{{$komponen->parent->komponen}}</td>
                                 <td>{{$komponen->skor}}</td>
+
+                                @if(Auth::user()->hak_akses == 'asesor' && Auth::user()->asesor->id_asesor == $asesor->where('tipe_ukk', 'real ukk')->first()['id_asesor'])
+
                                 <td><button data-komponen="{{$komponen->komponen}}" data-skor="{{ $komponen->skor }}" data-url="{{route('asesor.detail-penilaian.edit', $komponen->id_detail_penilaian)}}" class="btn btn-sm btn-warning editSkor"><span class="fa fa-edit"></span></button></td>
+
+                                @endif
                             </tr>
                             @endforeach
                         </tbody>
