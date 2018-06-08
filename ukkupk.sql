@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: localhost
--- Generation Time: Jun 08, 2018 at 08:41 AM
+-- Generation Time: Jun 08, 2018 at 11:51 AM
 -- Server version: 10.2.14-MariaDB
 -- PHP Version: 7.1.16
 
@@ -174,15 +174,6 @@ CREATE TABLE `kelas` (
   `id_jurusan` int(11) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
---
--- Dumping data for table `kelas`
---
-
-INSERT INTO `kelas` (`id_kelas`, `nama_kelas`, `id_jurusan`) VALUES
-(1, '12 RPL 1', 4),
-(2, '12 RPL 2', 4),
-(3, '12 RPL 3', 4);
-
 -- --------------------------------------------------------
 
 --
@@ -340,7 +331,7 @@ CREATE TABLE `tahun_aktif` (
 --
 
 INSERT INTO `tahun_aktif` (`id_tahun_aktif`, `id_tahun_ajar`) VALUES
-(1, 2);
+(1, 1);
 
 -- --------------------------------------------------------
 
@@ -362,7 +353,7 @@ CREATE TABLE `users` (
 --
 
 INSERT INTO `users` (`id_user`, `username`, `password`, `akses`, `email`, `remember_token`) VALUES
-(28, 'Administrator', '$2y$10$Uqlzr3UFIN.W5FcW7Yjc5O7wyKQE4fcXx86w1Qa05UeL9XIIXKzvK', 'administrator', NULL, 'eR5qnsXe9hesddptiEmrP1duLvQ5NoSQJCA80u3QTEmQnSgEXe9CSlLg8wMa'),
+(28, 'Administrator', '$2y$10$Uqlzr3UFIN.W5FcW7Yjc5O7wyKQE4fcXx86w1Qa05UeL9XIIXKzvK', 'administrator', NULL, 'lboGdLP7v9Rcr6MEPIbL71SNAWh7XZZl6Ak8dUbJFaohGbN2Z397Pvueeyfk'),
 (30, '19021976-1-CCDI', '$2y$10$x7bUXloW/Vxe8UJoGRAQ3ey4WYDHABjFKkRaPtdKEEpuuN96cH9Qe', 'asesor', 'yudi.subekti.skom@gmail.com', 'VgQfHxnnsCLyBDXjmcm6I4Wykj7afr9wvnZDscgWjqXcRk3hKR7AWIuzKUU5'),
 (31, 'eks', '$2y$10$EaAaBNWjHL620buBtBjx6O8VWENDcSqt0U7GWDUuvH8uQYwfKWYk6', 'asesor', 'yusjayusman@gmail.com', 'GVrsGMrGzoHJCOGUdFjuYWu6U6Wlpq8y0HMCaZLdX3MvlFtY1VRc74c441bI'),
 (32, 'fahri', '$2y$10$EaAaBNWjHL620buBtBjx6O8VWENDcSqt0U7GWDUuvH8uQYwfKWYk6', 'asesor', 'mzfahri620@gmail.com', 'fsig881CLu7YJ2N6Wh9CXAVIBJhl2yjwJs3tAHNclXFe0uJaoroJ4ETwdPSZ');
@@ -507,13 +498,13 @@ ALTER TABLE `indikator`
 -- AUTO_INCREMENT for table `jurusan`
 --
 ALTER TABLE `jurusan`
-  MODIFY `id_jurusan` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=5;
+  MODIFY `id_jurusan` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=7;
 
 --
 -- AUTO_INCREMENT for table `kelas`
 --
 ALTER TABLE `kelas`
-  MODIFY `id_kelas` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=4;
+  MODIFY `id_kelas` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=11;
 
 --
 -- AUTO_INCREMENT for table `komponen`

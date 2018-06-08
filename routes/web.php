@@ -138,7 +138,25 @@ Route::name('asesor.detail-penilaian.')->group(function () {
     Route::get('/asesor/penilaian/show/{id}', 'DetailPenilaianController@show')->name('show');
 });
 
+// Jurusan
 
+Route::name('admin.jurusan.')->group(function() {
+    Route::get('/admin/jurusan', 'JurusanController@index')->name('index');
+    Route::get('/admin/jurusan/create', 'JurusanController@create')->name('create');
+    Route::post('/admin/jurusan/create', 'JurusanController@store')->name('store');
+    Route::get('/admin/jurusan/edit/{id}', 'JurusanController@edit')->name('edit');
+    Route::post('/admin/jurusan/edit/{id}', 'JurusanController@update')->name('update');
+    Route::get('/admin/jurusan/delete/{id}', 'JurusanController@destroy')->name('delete');
+});
+
+Route::name('admin.kelas.')->group(function() {
+    Route::get('/admin/kelas', 'KelasController@index')->name('index');
+    Route::get('/admin/kelas/create', 'KelasController@create')->name('create');
+    Route::post('/admin/kelas/create', 'KelasController@store')->name('store');
+    Route::get('/admin/kelas/edit/{id}', 'KelasController@edit')->name('edit');
+    Route::post('/admin/kelas/edit/{id}', 'KelasController@update')->name('update');
+    Route::get('/admin/kelas/delete/{id}', 'KelasController@destroy')->name('delete');
+});
 
 
 

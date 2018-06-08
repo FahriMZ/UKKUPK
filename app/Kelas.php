@@ -39,4 +39,8 @@ class Kelas extends Model
     {
         return $this->belongsTo('App\Jurusan', 'id_jurusan');
     }
+
+    public function peserta() {
+        return $this->hasMany('App\Peserta', 'id_kelas');
+    }
 }

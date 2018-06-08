@@ -69,6 +69,8 @@
                             <li><a class="nav-link" href="{{ route('admin.asesor.index') }}">ASESOR</a></li>
                             <li><a class="nav-link" href="{{ route('admin.tahun-ajar.index') }}">TAHUN AJAR</a></li>
                             <li><a class="nav-link" href="{{ route('admin.peserta.index') }}">PESERTA</a></li>
+                            <li><a class="nav-link" href="{{ route('admin.kelas.index') }}">KELAS</a></li>
+                            <li><a class="nav-link" href="{{ route('admin.jurusan.index') }}">JURUSAN</a></li>
                             <li><a class="nav-link" href="{{ route('admin.perusahaan.index') }}">PERUSAHAAN</a></li>
                             <li><a class="nav-link" href="{{ route('admin.komponen.index') }}">KOMPONEN</a></li>
                             <li><a class="nav-link" href="{{route('asesor.penilaian.index')}}">PENILAIAN</a></li>
