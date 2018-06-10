@@ -36,4 +36,8 @@ class Jurusan extends Model
     {
         return $this->hasMany('App\Kelas', 'id_jurusan');
     }
+
+    public function komponen() {
+        return $this->hasMany('App\Komponen', 'id_jurusan');
+    }
 }

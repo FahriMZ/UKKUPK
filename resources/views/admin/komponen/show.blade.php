@@ -17,7 +17,7 @@
 
         <h4 class="card-title">Komponen</h4>
         <p class="card-subtitle pb-2">
-            <span>{{$komponen->komponen}}</span>
+            <span>{{$komponen->komponen}}</span> | <span class="text-success">{{$komponen->jurusan->nama_jurusan}}</span>
         </p>
 
         <div class="btn-group">

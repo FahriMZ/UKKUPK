@@ -38,7 +38,9 @@ class DetailPenilaianController extends Controller
     public function create($id)
     {
         $penilaian = Penilaian::findOrFail($id);
-        $komponen = Komponen::all();
+        // dd($penilaian);
+        $komponen = Komponen::where('id_jurusan', $penilaian->peserta->kelas->id_jurusan)->get();
+        // dd($komponen);
 
         return view('asesor.detail-penilaian.create', compact('penilaian', 'komponen'));
     }

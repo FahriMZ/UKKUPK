@@ -1,5 +1,8 @@
 <?php
 
+use App\Jurusan;
+use App\Komponen;
+
 /*
 |--------------------------------------------------------------------------
 | Web Routes
@@ -147,6 +150,7 @@ Route::name('admin.jurusan.')->group(function() {
     Route::get('/admin/jurusan/edit/{id}', 'JurusanController@edit')->name('edit');
     Route::post('/admin/jurusan/edit/{id}', 'JurusanController@update')->name('update');
     Route::get('/admin/jurusan/delete/{id}', 'JurusanController@destroy')->name('delete');
+    Route::post('/admin/jurusan/set-jurusan-aktif', 'JurusanController@setJurusanAktif')->name('setJurusanAktif');
 });
 
 Route::name('admin.kelas.')->group(function() {
@@ -158,7 +162,15 @@ Route::name('admin.kelas.')->group(function() {
     Route::get('/admin/kelas/delete/{id}', 'KelasController@destroy')->name('delete');
 });
 
+// Chained dropdown selection
+Route::get('/api/dropdown', function() {
 
+    $input = Request::get('option');
+    // return $input;
+    $parentKomponen = Komponen::where('id_jurusan', $input);
+    // return $parentKomponen;
+    return Response::make($parentKomponen->get(['id_komponen', 'komponen']));
+});
 
 
 

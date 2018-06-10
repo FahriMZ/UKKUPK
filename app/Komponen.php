@@ -32,7 +32,7 @@ class Komponen extends Model
     /**
      * @var array
      */
-    protected $fillable = ['parent_komponen', 'komponen'];
+    protected $fillable = ['parent_komponen', 'komponen', 'id_jurusan'];
 
     /**
      * Indicates if the model should be timestamped.
@@ -45,6 +45,10 @@ class Komponen extends Model
      * @return \Illuminate\Database\Eloquent\Relations\BelongsTo
      */
     
+    public function jurusan() {
+        return $this->belongsTo('App\Jurusan', 'id_jurusan');
+    }
+
     public function children() {
         return $this->hasMany(self::class, 'parent_komponen');
     }

@@ -1,6 +1,6 @@
 @if($kom->parent_komponen == null)
 <div class="card card-body mb-1">
-    <h5 class="card-title">{{ $kom['komponen'] }}</h5>
+    <h5 class="card-title">{{ $kom['komponen'] }} | <span class="text-success">{{$kom->jurusan->nama_jurusan}}</span></h5>
     @if(count($kom->indikator) > 0)
     <a href="{{route('admin.komponen.show', $kom['id_komponen'])}}">Lihat detail</a>
     @else

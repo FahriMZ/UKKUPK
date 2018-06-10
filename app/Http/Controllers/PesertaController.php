@@ -8,6 +8,7 @@ use App\Peserta;
 use App\TahunAjar;
 use App\TahunAktif;
 use App\Kelas;
+use App\JurusanAktif;
 
 use Excel;
 
@@ -30,10 +31,16 @@ class PesertaController extends Controller
         // $peserta = Peserta::all();
 
         if(isset($_GET['q'])) {
-            $peserta = Peserta::where('nama', 'LIKE', '%'.$_GET['q'].'%')
-                        ->where('id_tahun_ajar', $tahun_aktif['id_tahun_ajar'])->paginate(7);
+            $peserta = Peserta::join('kelas', 'peserta.id_kelas', 'kelas.id_kelas')
+                        ->where('id_jurusan', JurusanAktif::first()['id_jurusan'])
+                        ->where('nama', 'LIKE', '%'.$_GET['q'].'%')
+                        ->where('id_tahun_ajar', $tahun_aktif['id_tahun_ajar'])
+                        ->paginate(7);
         }else{
-            $peserta = Peserta::where('id_tahun_ajar', $tahun_aktif['id_tahun_ajar'])->paginate(7);
+            $peserta = Peserta::join('kelas', 'peserta.id_kelas', 'kelas.id_kelas')
+                        ->where('id_jurusan', JurusanAktif::first()['id_jurusan'])
+                        ->where('id_tahun_ajar', $tahun_aktif['id_tahun_ajar'])
+                        ->paginate(7);
         }
 
         return view('admin.peserta.index', compact('peserta', 'tahun_aktif'));
@@ -164,12 +171,19 @@ class PesertaController extends Controller
 
                     // Validasi
                     $id_tahun_ajar = TahunAjar::where('tahun_ajar', $value->tahun_ajar)->first()['id_tahun_ajar'] ?: null;
+                    $id_kelas = Kelas::where('nama_kelas', $value->kelas)->first()['id_kelas'] ?: null;
 
                     // return $id_tahun_ajar;
 
                     if($id_tahun_ajar == null) {
 
                         return back()->with('notification', 'Tahun ajar <h3 class="text-danger">'.$value->tahun_ajar.'</h3> tidak terdaftar');
+
+                    }
+
+                    if($id_kelas == null) {
+
+                        return back()->with('notification', 'Kelas <h3 class="text-danger">'.$value->kelas.'</h3> tidak terdaftar');
 
                     }
 
@@ -184,6 +198,7 @@ class PesertaController extends Controller
                         'email'             => $value->email,
                         'kontak'            => $value->kontak,
                         'id_tahun_ajar'     => $id_tahun_ajar,
+                        'id_kelas'          => $id_kelas
 
                     ];
                 }

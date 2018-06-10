@@ -163,6 +163,36 @@
             window.location.replace(url);
         }
     });
+
+    $('#select_jurusan_1').change(function() {
+        $.get("{{ url('api/dropdown') }}", {
+            option : $(this).val()
+        }, function(data) {
+            var model = $('#select_parent_komponen_1');
+            model.empty();
+
+            model.append("<option value=''>Tidak ada</option>")
+
+            $.each(data, function(index, element) {
+                model.append("<option value='"+element.id_komponen+"'>" + element.komponen + "</option>")
+            })
+        });
+    });
+
+    $('#select_jurusan_2').change(function() {
+        $.get("{{ url('api/dropdown') }}", {
+            option : $(this).val()
+        }, function(data) {
+            var model = $('#select_parent_komponen_2');
+            model.empty();
+
+            model.append("<option value=''>Tidak ada</option>")
+
+            $.each(data, function(index, element) {
+                model.append("<option value='"+element.id_komponen+"'>" + element.komponen + "</option>")
+            })
+        });
+    });
     </script>
 
     @yield('js')

@@ -11,6 +11,8 @@ use App\DetailPenilaian;
 use App\Komponen;
 use App\DetailKomponen;
 
+use App\JurusanAktif;
+
 use Auth;
 
 use PHPExcel_Worksheet_Drawing;
@@ -20,7 +22,6 @@ use Illuminate\Pagination\LengthAwarePaginator;
 
 class PenilaianController extends Controller
 {
-
     public function __construct() {
         $this->middleware('auth');
     }
@@ -32,14 +33,19 @@ class PenilaianController extends Controller
      */
     public function index()
     {
+        $idJurusanAktif = JurusanAktif::first()['id_jurusan'];
         $tahunAktif = TahunAktif::first();
-        
+
         if(isset($_GET['q'])) {
-            $peserta = Peserta::where('id_tahun_ajar', $tahunAktif->id_tahun_ajar)
-                                    ->where('nama', 'LIKE', '%'.$_GET['q'].'%')
-                                    ->paginate(15);
+            $peserta = Peserta::join('kelas', 'peserta.id_kelas', 'kelas.id_kelas')
+                            ->where('id_jurusan', $idJurusanAktif)
+                            ->where('id_tahun_ajar', $tahunAktif->id_tahun_ajar)
+                            ->where('nama', 'LIKE', '%'.$_GET['q'].'%')
+                            ->paginate(15);
         } else {
-            $peserta = Peserta::where('id_tahun_ajar', $tahunAktif->id_tahun_ajar)->paginate(15);
+            $peserta = Peserta::join('kelas', 'peserta.id_kelas', 'kelas.id_kelas')
+                            ->where('id_jurusan', $idJurusanAktif)
+                            ->where('id_tahun_ajar', $tahunAktif->id_tahun_ajar)->paginate(15);
         }
 
         // $peserta = Peserta::first();
@@ -139,12 +145,17 @@ class PenilaianController extends Controller
 
     // Memproses semua nilai akhir
     public function exportData($tipe_ukk = 'pra ukk') {
-        // dd($data_peserta);
-        $komponenUtama = Komponen::where('parent_komponen', null)->get();
+
+        $idJurusanAktif = JurusanAktif::first()['id_jurusan'];
+
+        // dd($idJurusanAktif);
+        $komponenUtama = Komponen::where('parent_komponen', null)->where('id_jurusan', $idJurusanAktif)->get();
 
 
         $penilaian = Penilaian::join('detail_penilaian', 'detail_penilaian.id_penilaian', 'penilaian.id_penilaian')
                         ->join('peserta', 'penilaian.id_peserta', 'peserta.id_peserta')
+                        ->join('kelas', 'peserta.id_kelas', 'kelas.id_kelas')
+                        ->where('id_jurusan', $idJurusanAktif)
                         ->where('peserta.id_tahun_ajar', TahunAktif::first()['id_tahun_ajar'])
                         ->where('penilaian.tipe_ukk', $tipe_ukk)
                         // ->where('peserta.nama', 'LIKE', '%'.$data_peserta.'%')
@@ -164,6 +175,8 @@ class PenilaianController extends Controller
         $arrPenilaian = [];
 
         $pesertaDinilai = Peserta::join('penilaian', 'peserta.id_peserta', 'penilaian.id_peserta')
+                            ->join('kelas', 'peserta.id_kelas', 'kelas.id_kelas')
+                            ->where('id_jurusan', $idJurusanAktif)
                             ->where('peserta.id_tahun_ajar', TahunAktif::first()['id_tahun_ajar'])
                             ->where('penilaian.tipe_ukk', $tipe_ukk)
                             ->get();
@@ -231,7 +244,7 @@ class PenilaianController extends Controller
                 {
                     $skor_perolehan = 0;
                     foreach($sub as $k => $val) {
-                        $skor_perolehan += array_sum( (array) $val) / @count($val);
+                        $skor_perolehan += array_sum( (array) $val) / ( @count($val) < 1 ? 1 : @count($val) );
                     }
                 }
 
@@ -258,7 +271,8 @@ class PenilaianController extends Controller
     }
 
     public function exportView() {
-        $komponenUtama = Komponen::where('parent_komponen', null)->get();
+        $idJurusanAktif = JurusanAktif::first()['id_jurusan'];
+        $komponenUtama = Komponen::where('parent_komponen', null)->where('id_jurusan', $idJurusanAktif)->get();
 
         $tahunAktif = TahunAktif::first();
 
@@ -295,7 +309,8 @@ class PenilaianController extends Controller
     }
 
     public function exportViewRealUkk() {
-        $komponenUtama = Komponen::where('parent_komponen', null)->get();
+        $idJurusanAktif = JurusanAktif::first()['id_jurusan'];
+        $komponenUtama = Komponen::where('parent_komponen', null)->where('id_jurusan', $idJurusanAktif)->get();
 
         $tahunAktif = TahunAktif::first();
 
@@ -349,7 +364,6 @@ class PenilaianController extends Controller
     public function export($tipe_ukk = 'pra ukk') {
 
         \Excel::create('PENILAIAN_UJIAN_PRAKTIK_KEJURUAN_'.date('d_m_Y'), function($excel) use ($tipe_ukk) {
-
             $arrNilai = $this->exportData($tipe_ukk);
 
             // Konversi array multi dimensi ke satu dimensi
@@ -361,18 +375,20 @@ class PenilaianController extends Controller
             }
 
             $tahunAjar = TahunAktif::first()->tahunAjar->tahun_ajar;
-
+            $idJurusanAktif = JurusanAktif::first()['id_jurusan'];
             // dd($tahunAjar);
 
             $judul = 'Lembar penilaian ujian praktik keujuruan untuk uji kompetensi keahlian';
 
             $excel->setDescription($judul.' '.$tahunAjar);
-            $excel->sheet('Penilaian', function($sheet) use ($arrNilai, $judul, $tahunAjar) {
+            $excel->sheet('Penilaian', function($sheet) use ($arrNilai, $judul, $tahunAjar, $idJurusanAktif) {
                 $sheet->fromArray($arrNilai, null, 'A7', false, false);
 
                 $headings = array('Nomor Peserta', 'Nama');
 
-                $komponenUtama = Komponen::where('parent_komponen', null)->get();
+                $komponenUtama = Komponen::where('parent_komponen', null)
+                                    ->where('id_jurusan', $idJurusanAktif)
+                                    ->get();
 
                 // menambahkan semua komponen ke headings
                 foreach ($komponenUtama as $key => $komponen) {

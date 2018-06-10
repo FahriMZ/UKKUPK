@@ -7,6 +7,8 @@ use Illuminate\Http\Request;
 use App\Komponen;
 use App\DetailKomponen;
 use App\Indikator;
+use App\Jurusan;
+use App\JurusanAktif;
 
 class KomponenController extends Controller
 {
@@ -21,20 +23,25 @@ class KomponenController extends Controller
      */
     public function index()
     {
-        $komponenUtama = Komponen::where('parent_komponen', null)->paginate(5);
-
+        $idJurusanAktif = JurusanAktif::first()['id_jurusan'];
+        $komponenUtama = Komponen::where('id_jurusan', $idJurusanAktif)
+                            ->where('parent_komponen', null)->paginate(5);
+        $semuaKomponen = Komponen::all();
+        $jurusan = Jurusan::all();
         if(isset($_GET['q'])) {
-            $komponen = Komponen::where('komponen', 'LIKE', '%'.$_GET['q'].'%')
+            $komponen = Komponen::where('id_jurusan', $idJurusanAktif)
+                            ->where('komponen', 'LIKE', '%'.$_GET['q'].'%')
                             ->where('parent_komponen', null)->paginate(1);
         } else {
-            $komponen = Komponen::where('parent_komponen', null)->paginate(1);
+            $komponen = Komponen::where('id_jurusan', $idJurusanAktif)
+                            ->where('parent_komponen', null)->paginate(1);
         }
         // $komponen = Komponen::where('parent_komponen', null)->get();
         // $s = Komponen::find(1);
 
         // return response()->json($komponenUtama);
 
-        return view('admin.komponen.index', compact('komponenUtama', 'komponen'));
+        return view('admin.komponen.index', compact('komponenUtama', 'komponen', 'semuaKomponen','jurusan'));
     }
 
     /**
@@ -58,6 +65,7 @@ class KomponenController extends Controller
         Komponen::create([
             'komponen'  => $request['komponen'],
             'parent_komponen'  => $request['parent_komponen'] == null ? null : $request['parent_komponen'],
+            'id_jurusan' => $request['id_jurusan']
         ]);
 
         return redirect()->back()->with('notification', 'Action completed');
@@ -70,6 +78,7 @@ class KomponenController extends Controller
         Komponen::create([
             'komponen'  => $request['komponen'],
             'parent_komponen'  => $request['parent_komponen'] == null ? null : $request['parent_komponen'],
+            'id_jurusan' => $request['id_jurusan']
         ]);
 
         return redirect()->back()->with('notification', 'Action completed');

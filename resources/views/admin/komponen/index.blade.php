@@ -39,19 +39,30 @@
                     @csrf
 
                     <div class="form-group">
-                        <label for="komponen">Komponen</label>
-                        <textarea name="komponen" id="komponen" class="form-control"></textarea>
+                        <label>Jurusan</label>
+                        <select id="select_jurusan_1" name="id_jurusan" class="form-control">
+                            <option disabled selected>-- Pilih salah satu --</option>
+                            @foreach($jurusan as $option)
+                                <option value="{{$option->id_jurusan}}">{{$option->nama_jurusan}}</option>
+                            @endforeach
+
+                        </select>
                     </div>
 
                     <div class="form-group">
                         <label>Parent Komponen</label>
-                        <select name="parent_komponen" class="form-control">
+                        <select id="select_parent_komponen_1" name="parent_komponen" class="form-control">
                             <option value="">Tidak ada</option>
-                            @foreach($komponen as $option)
+                            {{-- @foreach($parentKomponen as $option)
                                 <option value="{{$option->id_komponen}}">{{$option->komponen}}</option>
-                            @endforeach
+                            @endforeach --}}
 
                         </select>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="komponen">Komponen</label>
+                        <textarea name="komponen" id="komponen" class="form-control"></textarea>
                     </div>
 
                     <div class="form-group">
@@ -75,19 +86,29 @@
                     <div class="form-group">
                         <label>Komponen</label>
                         <select name="komponen" class="form-control">
-                            @foreach($komponen as $option)
+                            @foreach($semuaKomponen as $option)
                                 <option value="{{$option->komponen}}">{{$option->komponen}}</option>
                             @endforeach
                         </select>
                     </div>
 
                     <div class="form-group">
-                        <label>Parent Komponen</label>
-                        <select name="parent_komponen" class="form-control">
-                            <option value="">Tidak ada</option>
-                            @foreach($komponen as $option)
-                                <option value="{{$option->id_komponen}}">{{$option->komponen}}</option>
+                        <label>Jurusan</label>
+                        <select id="select_jurusan_2" name="id_jurusan" class="form-control">
+                            @foreach($jurusan as $option)
+                                <option value="{{$option->id_jurusan}}">{{$option->nama_jurusan}}</option>
                             @endforeach
+
+                        </select>
+                    </div>
+
+                    <div class="form-group">
+                        <label>Parent Komponen</label>
+                        <select id="select_parent_komponen_2" name="parent_komponen" class="form-control">
+                            <option value="">Tidak ada</option>
+                            {{-- @foreach($semuaKomponen as $option)
+                                <option value="{{$option->id_komponen}}">{{$option->komponen}}</option>
+                            @endforeach --}}
 
                         </select>
                     </div>

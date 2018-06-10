@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use App\Jurusan;
+use App\JurusanAktif;
 
 class JurusanController extends Controller
 {
@@ -14,13 +15,14 @@ class JurusanController extends Controller
      */
     public function index()
     {
+        $jurusanAktif = JurusanAktif::first();
         if(isset($_GET['q'])) {
             $jurusan = Jurusan::where('nama_jurusan', 'LIKE', '%'.$_GET['q'].'%')->paginate(11);
         } else {
             $jurusan = Jurusan::paginate(11);
         }
 
-        return view('admin.jurusan.index', compact('jurusan'));
+        return view('admin.jurusan.index', compact('jurusan', 'jurusanAktif'));
     }
 
     /**
@@ -100,5 +102,15 @@ class JurusanController extends Controller
     {
         Jurusan::findOrFail($id)->delete();
         return redirect(route('admin.jurusan.index'))->with('notification', 'Action Completed');
+    }
+
+    public function setJurusanAktif(Request $request) {
+
+        JurusanAktif::first()->update($request->all(), [
+            'id_jurusan'    => $request->id_jurusan
+        ]);
+
+        return redirect(route('admin.jurusan.index'))->with('notification', 'Action Completed');
+
     }
 }

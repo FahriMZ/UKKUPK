@@ -14,6 +14,15 @@
         <div class="row">
             <div class="col card-title">
             <h3>Jurusan</h3>
+
+            <p>Jurusan aktif :
+                <span class="text-info text-uppercase">{{ $jurusanAktif->jurusan->nama_jurusan }}</span>
+                <button class="btn btn-link editJurusanAktif">
+                    <span class="fa fa-edit"></span>
+                </button>
+            </p>
+
+
             @if(isset($_GET['q']) && $_GET['q'] != '')
             <code>hasil pencarian : "{{ $_GET['q'] }}"</code>
             @endif
@@ -60,8 +69,49 @@
         @endif
     </div>
 </div>
+
+<!-- Modal edit detail -->
+<div class="modal fade" id="editDetail" tabindex="-1" role="dialog" aria-hidden="true">
+  <div class="modal-dialog" role="document">
+    <div class="modal-content">
+      <div class="modal-header">
+        <h5 class="modal-title">Jurusan yang aktif </h5>
+        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+          <span aria-hidden="true">&times;</span>
+        </button>
+      </div>
+    <form method="POST" id="formEditDetail" action="{{route('admin.jurusan.setJurusanAktif')}}">
+      <div class="modal-body">
+            @csrf
+            <div class="form-group">
+                <select name="id_jurusan" class="form-control">
+                    @foreach($jurusan as $option)
+                    <option value="{{$option->id_jurusan}}">{{$option->nama_jurusan}}</option>
+                    @endforeach
+                </select>
+            </div>
+
+            <button type="submit" class="btn btn-primary">Save</button>
+      </div>
+    </form>
+    </div>
+  </div>
+</div>
+
+<!-- END modal -->
+
 @endsection
 
 @section('js')
+<script type="text/javascript">
+    $(document).ready(function() {
 
+        $('.editJurusanAktif').click(function(e) {
+
+            $('#editDetail').modal();
+
+        });
+
+    });
+</script>
 @stop
