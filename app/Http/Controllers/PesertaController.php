@@ -66,6 +66,16 @@ class PesertaController extends Controller
      */
     public function store(Request $data)
     {
+        $data->validate([
+
+            'id_peserta' => 'unique:peserta',
+
+        ], [
+
+            'id_peserta.unique' => 'ID Peserta sudah ada',
+
+        ]);
+
         // dd($data->all());
 
         Peserta::create([

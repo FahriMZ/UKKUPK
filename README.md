@@ -14,4 +14,4 @@ Sistem penilaian untuk uji kompetensi keahlian
 4. rename file .env.example ke .env
 5. setting DB_DATABASE, DB_USERNAME, DB_PASSWORD di .env
 6. CMD: php artisan key:generate
-Selesai, tinggal php artisan serve
+7. Selesai, tinggal php artisan serve

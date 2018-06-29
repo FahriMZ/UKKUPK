@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: localhost
--- Generation Time: Jun 10, 2018 at 03:09 PM
+-- Generation Time: Jun 29, 2018 at 05:50 AM
 -- Server version: 10.2.14-MariaDB
 -- PHP Version: 7.1.16
 
@@ -36,17 +36,18 @@ CREATE TABLE `asesor` (
   `alamat` text NOT NULL,
   `jenis_kelamin` enum('Laki-laki','Perempuan') NOT NULL,
   `tanggal_lahir` date NOT NULL,
-  `kontak` varchar(30) NOT NULL
+  `kontak` varchar(30) NOT NULL,
+  `id_jurusan` int(11) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
 --
 -- Dumping data for table `asesor`
 --
 
-INSERT INTO `asesor` (`id_asesor`, `id_user`, `id_perusahaan`, `nama`, `alamat`, `jenis_kelamin`, `tanggal_lahir`, `kontak`) VALUES
-(25, 30, 10, 'Yudi Subekti, S.Kom', 'Jl.Pagarsih Gg. Citepus Dalam II No. 23 RT.007/RW.003 Kel.Cibadak, Kec.Astana Anyara Kota Bandung 40241', 'Laki-laki', '1976-02-19', '081220083232'),
-(26, 31, 11, 'Yus Jayusman, M.T', 'Bandung', 'Laki-laki', '1977-10-08', '-'),
-(27, 32, 10, 'Fahri Muhamad Zulkarnaen', 'Jalan Cigondewah Kaler RT.01/RW.03 No. 57 Kode pos 40214 Bandung', 'Laki-laki', '2000-08-09', '08992032172');
+INSERT INTO `asesor` (`id_asesor`, `id_user`, `id_perusahaan`, `nama`, `alamat`, `jenis_kelamin`, `tanggal_lahir`, `kontak`, `id_jurusan`) VALUES
+(25, 30, 10, 'Yudi Subekti, S.Kom', 'Jl.Pagarsih Gg. Citepus Dalam II No. 23 RT.007/RW.003 Kel.Cibadak, Kec.Astana Anyara Kota Bandung 40241', 'Laki-laki', '1976-02-19', '081220083232', 4),
+(26, 31, 11, 'Yus Jayusman, M.T', 'Bandung', 'Laki-laki', '1977-10-08', '-', 4),
+(27, 32, 10, 'Fahri Muhamad Zulkarnaen', 'Jalan Cigondewah Kaler RT.01/RW.03 No. 57 Kode pos 40214 Bandung', 'Laki-laki', '2000-08-09', '08992032172', 4);
 
 -- --------------------------------------------------------
 
@@ -135,6 +136,14 @@ CREATE TABLE `dokumen_asesor` (
   `id_asesor` int(11) NOT NULL
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
+--
+-- Dumping data for table `dokumen_asesor`
+--
+
+INSERT INTO `dokumen_asesor` (`id_dokumen`, `nama_dokumen`, `tanggal_diupload`, `id_asesor`) VALUES
+(28, 'lamaran_bot_1528720451.pdf', '2018-06-11 12:34:11', 27),
+(29, 'foto_crop_1528720615.png', '2018-06-11 12:36:55', 27);
+
 -- --------------------------------------------------------
 
 --
@@ -215,7 +224,7 @@ CREATE TABLE `jurusan_aktif` (
 --
 
 INSERT INTO `jurusan_aktif` (`id_jurusan_aktif`, `id_jurusan`) VALUES
-(1, 4);
+(1, 2);
 
 -- --------------------------------------------------------
 
@@ -402,7 +411,9 @@ CREATE TABLE `peserta` (
 --
 
 INSERT INTO `peserta` (`id_peserta`, `nama`, `alamat`, `jenis_kelamin`, `tanggal_lahir`, `email`, `kontak`, `id_tahun_ajar`, `id_kelas`) VALUES
+('01-111-029-02', 'Wendy Setiawan', 'Jalan Kebonkopi', 'Laki-laki', '2000-12-12', 'wsetiawan135790@gmail.com', '312738917389', 1, 11),
 ('01-111-029-03', 'Multahada', 'fkjadskjkj', 'Laki-laki', '2000-01-10', 'ds@fexca.cs', '948239084', 1, 12),
+('01-111-029-04', 'Zen Mukari', 'Jalan Safari', 'Laki-laki', '2000-12-12', 'efad2@DASCC.S', '2131231', 1, 12),
 ('02-111-28-4', 'Peserta 3', 'example address…', 'Laki-laki', '1970-01-01', 'p3@example.com', '9328139823', 3, 11),
 ('02-111-29-3', 'Peserta 2', 'example address…', 'Perempuan', '1970-01-01', 'p2@example.com', '3912839182', 2, 11),
 ('02-111-30-2', 'Peserta 1', 'example address…', 'Laki-laki', '1970-01-01', 'p1@example.com', '9328139823', 1, 11);
@@ -466,10 +477,10 @@ CREATE TABLE `users` (
 --
 
 INSERT INTO `users` (`id_user`, `username`, `password`, `akses`, `email`, `remember_token`) VALUES
-(28, 'Administrator', '$2y$10$Uqlzr3UFIN.W5FcW7Yjc5O7wyKQE4fcXx86w1Qa05UeL9XIIXKzvK', 'administrator', NULL, 'lboGdLP7v9Rcr6MEPIbL71SNAWh7XZZl6Ak8dUbJFaohGbN2Z397Pvueeyfk'),
+(28, 'Administrator', '$2y$10$Uqlzr3UFIN.W5FcW7Yjc5O7wyKQE4fcXx86w1Qa05UeL9XIIXKzvK', 'administrator', NULL, '2TaJcj1b9VN4t20K72EYfADh4GnJCBka2i2f9x0Hay4K8bQvZBwJZF0xqymf'),
 (30, '19021976-1-CCDI', '$2y$10$x7bUXloW/Vxe8UJoGRAQ3ey4WYDHABjFKkRaPtdKEEpuuN96cH9Qe', 'asesor', 'yudi.subekti.skom@gmail.com', 'VgQfHxnnsCLyBDXjmcm6I4Wykj7afr9wvnZDscgWjqXcRk3hKR7AWIuzKUU5'),
 (31, 'eks', '$2y$10$EaAaBNWjHL620buBtBjx6O8VWENDcSqt0U7GWDUuvH8uQYwfKWYk6', 'asesor', 'yusjayusman@gmail.com', '65UJUhRNRVVpGgKEpv4T91GaE9hDZYs9aV5eE2R0OgRfOyKp60OO4TcOF8ff'),
-(32, 'fahri', '$2y$10$EaAaBNWjHL620buBtBjx6O8VWENDcSqt0U7GWDUuvH8uQYwfKWYk6', 'asesor', 'mzfahri620@gmail.com', 'fsig881CLu7YJ2N6Wh9CXAVIBJhl2yjwJs3tAHNclXFe0uJaoroJ4ETwdPSZ');
+(32, 'fahri', '$2y$10$EaAaBNWjHL620buBtBjx6O8VWENDcSqt0U7GWDUuvH8uQYwfKWYk6', 'asesor', 'mzfahri620@gmail.com', '335zcPeq3CToEjh4l8DganDCDeOhI5SAs6oiYjKlHNc4EWOUo5y3ShQyDhfG');
 
 --
 -- Indexes for dumped tables
@@ -481,7 +492,8 @@ INSERT INTO `users` (`id_user`, `username`, `password`, `akses`, `email`, `remem
 ALTER TABLE `asesor`
   ADD PRIMARY KEY (`id_asesor`),
   ADD KEY `asesor_ibfk_1` (`id_user`),
-  ADD KEY `asesor_ibfk_2` (`id_perusahaan`);
+  ADD KEY `asesor_ibfk_2` (`id_perusahaan`),
+  ADD KEY `id_jurusan` (`id_jurusan`);
 
 --
 -- Indexes for table `detail_komponen`
@@ -589,7 +601,7 @@ ALTER TABLE `users`
 -- AUTO_INCREMENT for table `asesor`
 --
 ALTER TABLE `asesor`
-  MODIFY `id_asesor` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=29;
+  MODIFY `id_asesor` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=32;
 
 --
 -- AUTO_INCREMENT for table `detail_komponen`
@@ -607,13 +619,13 @@ ALTER TABLE `detail_penilaian`
 -- AUTO_INCREMENT for table `dokumen_asesor`
 --
 ALTER TABLE `dokumen_asesor`
-  MODIFY `id_dokumen` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=28;
+  MODIFY `id_dokumen` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=30;
 
 --
 -- AUTO_INCREMENT for table `indikator`
 --
 ALTER TABLE `indikator`
-  MODIFY `id_indikator` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=28;
+  MODIFY `id_indikator` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=29;
 
 --
 -- AUTO_INCREMENT for table `jurusan`
@@ -637,7 +649,7 @@ ALTER TABLE `kelas`
 -- AUTO_INCREMENT for table `komponen`
 --
 ALTER TABLE `komponen`
-  MODIFY `id_komponen` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=98;
+  MODIFY `id_komponen` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=99;
 
 --
 -- AUTO_INCREMENT for table `penilaian`
@@ -649,7 +661,7 @@ ALTER TABLE `penilaian`
 -- AUTO_INCREMENT for table `perusahaan`
 --
 ALTER TABLE `perusahaan`
-  MODIFY `id_perusahaan` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=20;
+  MODIFY `id_perusahaan` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=21;
 
 --
 -- AUTO_INCREMENT for table `tahun_ajar`
@@ -667,7 +679,7 @@ ALTER TABLE `tahun_aktif`
 -- AUTO_INCREMENT for table `users`
 --
 ALTER TABLE `users`
-  MODIFY `id_user` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=34;
+  MODIFY `id_user` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=42;
 
 --
 -- Constraints for dumped tables
@@ -678,7 +690,8 @@ ALTER TABLE `users`
 --
 ALTER TABLE `asesor`
   ADD CONSTRAINT `asesor_ibfk_1` FOREIGN KEY (`id_user`) REFERENCES `users` (`id_user`) ON DELETE CASCADE,
-  ADD CONSTRAINT `asesor_ibfk_2` FOREIGN KEY (`id_perusahaan`) REFERENCES `perusahaan` (`id_perusahaan`) ON DELETE CASCADE;
+  ADD CONSTRAINT `asesor_ibfk_2` FOREIGN KEY (`id_perusahaan`) REFERENCES `perusahaan` (`id_perusahaan`) ON DELETE CASCADE,
+  ADD CONSTRAINT `asesor_ibfk_3` FOREIGN KEY (`id_jurusan`) REFERENCES `jurusan` (`id_jurusan`) ON DELETE NO ACTION ON UPDATE NO ACTION;
 
 --
 -- Constraints for table `detail_komponen`

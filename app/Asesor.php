@@ -35,7 +35,7 @@ class Asesor extends Model
     /**
      * @var array
      */
-    protected $fillable = ['id_user', 'id_perusahaan', 'nama', 'alamat', 'jenis_kelamin', 'tanggal_lahir', 'kontak'];
+    protected $fillable = ['id_user', 'id_perusahaan', 'nama', 'alamat', 'jenis_kelamin', 'tanggal_lahir', 'kontak', 'id_jurusan'];
 
     /**
      * Indicates if the model should be timestamped.
@@ -62,5 +62,9 @@ class Asesor extends Model
 
     public function dokumenAsesor() {
         return $this->hasMany('App\DokumenAsesor', 'id_asesor');
+    }
+
+    public function jurusan() {
+        return $this->belongsTo('App\Jurusan', 'id_jurusan');
     }
 }

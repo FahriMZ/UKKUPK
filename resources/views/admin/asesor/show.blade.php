@@ -63,6 +63,10 @@
                         <td>Perusahaan</td>
                         <td>{{ $asesor->perusahaan->nama_perusahaan }}</td>
                     </tr>
+                    <tr>
+                        <td>Jurusan</td>
+                        <td>{{ $asesor->jurusan->nama_jurusan }}</td>
+                    </tr>
                 </table>
             </div>
             </div>

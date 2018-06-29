@@ -6,11 +6,13 @@ use Illuminate\Http\Request;
 
 use App\TahunAktif;
 use App\Peserta;
+use App\Asesor;
 use App\Penilaian;
 use App\DetailPenilaian;
 use App\Komponen;
 use App\DetailKomponen;
 
+use App\Jurusan;
 use App\JurusanAktif;
 
 use Auth;
@@ -36,23 +38,45 @@ class PenilaianController extends Controller
         $idJurusanAktif = JurusanAktif::first()['id_jurusan'];
         $tahunAktif = TahunAktif::first();
 
-        if(isset($_GET['q'])) {
-            $peserta = Peserta::join('kelas', 'peserta.id_kelas', 'kelas.id_kelas')
-                            ->where('id_jurusan', $idJurusanAktif)
-                            ->where('id_tahun_ajar', $tahunAktif->id_tahun_ajar)
-                            ->where('nama', 'LIKE', '%'.$_GET['q'].'%')
-                            ->paginate(15);
-        } else {
-            $peserta = Peserta::join('kelas', 'peserta.id_kelas', 'kelas.id_kelas')
-                            ->where('id_jurusan', $idJurusanAktif)
-                            ->where('id_tahun_ajar', $tahunAktif->id_tahun_ajar)->paginate(15);
+        if(Auth::user()->akses == 'administrator') {
+            $jurusanAktif = Jurusan::where('id_jurusan', $idJurusanAktif)->first();
+
+            if(isset($_GET['q'])) {
+                $peserta = Peserta::join('kelas', 'peserta.id_kelas', 'kelas.id_kelas')
+                                ->where('id_jurusan', $idJurusanAktif)
+                                ->where('id_tahun_ajar', $tahunAktif->id_tahun_ajar)
+                                ->where('nama', 'LIKE', '%'.$_GET['q'].'%')
+                                ->paginate(15);
+            } else {
+                $peserta = Peserta::join('kelas', 'peserta.id_kelas', 'kelas.id_kelas')
+                                ->where('id_jurusan', $idJurusanAktif)
+                                ->where('id_tahun_ajar', $tahunAktif->id_tahun_ajar)->paginate(15);
+            }
+
+        } elseif(Auth::user()->akses == 'asesor') { // Kalau asesor, peserta yang ditampilkan berdasarkan jurusan asesor
+            $asesor = Asesor::where('id_user', Auth::user()->id_user)->first();
+            $jurusanAktif = Jurusan::where('id_jurusan', $asesor->id_jurusan)->first();
+
+            // return $asesor->id_jurusan;
+
+            if(isset($_GET['q'])) {
+                $peserta = Peserta::join('kelas', 'peserta.id_kelas', 'kelas.id_kelas')
+                                ->where('id_jurusan', $asesor->id_jurusan)
+                                ->where('id_tahun_ajar', $tahunAktif->id_tahun_ajar)
+                                ->where('nama', 'LIKE', '%'.$_GET['q'].'%')
+                                ->paginate(15);
+            } else {
+                $peserta = Peserta::join('kelas', 'peserta.id_kelas', 'kelas.id_kelas')
+                                ->where('id_jurusan', $asesor->id_jurusan)
+                                ->where('id_tahun_ajar', $tahunAktif->id_tahun_ajar)->paginate(15);
+            }
         }
 
         // $peserta = Peserta::first();
 
         // dd($peserta->count());
 
-        return view('asesor.penilaian.index', compact('peserta'));
+        return view('asesor.penilaian.index', compact('peserta', 'jurusanAktif'));
     }
 
     /**

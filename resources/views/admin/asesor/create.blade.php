@@ -126,6 +126,24 @@
                         </div>
                     </div>
 
+                    <div class="form-group row">
+                        <label for="id_jurusan" class="col-md-4 col-form-label text-md-right">{{ __('Jurusan') }}</label>
+
+                        <div class="col-md-6">
+                            <select class="form-control" name="id_jurusan">
+                                @foreach($jurusan as $option)
+                                <option value="{{$option->id_jurusan}}">{{ $option->nama_jurusan }}</option>
+                                @endforeach
+                            </select>
+
+                            @if ($errors->has('id_jurusan'))
+                                <span class="invalid-feedback">
+                                    <strong>{{ $errors->first('id_jurusan') }}</strong>
+                                </span>
+                            @endif
+                        </div>
+                    </div>
+
                     <a href="{{ route('admin.perusahaan.create') }}" class="float-right">Perusahaan baru</a>
                     <!-- <div class="form-group row">
                         <label for="nama_perusahaan" class="col-md-4 col-form-label text-md-right">{{ __('Nama perusahaan') }}</label>

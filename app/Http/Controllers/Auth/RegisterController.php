@@ -9,6 +9,7 @@ use Illuminate\Support\Facades\Validator;
 use Illuminate\Foundation\Auth\RegistersUsers;
 
 use App\Perusahaan;
+use App\Jurusan;
 use App\Asesor;
 
 class RegisterController extends Controller
@@ -47,7 +48,8 @@ class RegisterController extends Controller
     public function showRegistrationForm()
     {
         $perusahaan = Perusahaan::all();
-        return view('auth.register', compact('perusahaan'));
+        $jurusan = Jurusan::all();
+        return view('auth.register', compact('perusahaan', 'jurusan'));
     }
 
     /**
@@ -109,7 +111,8 @@ class RegisterController extends Controller
             'jenis_kelamin'     => $data['jenis_kelamin'],
             'tanggal_lahir'     => $data['tanggal_lahir'],
             'alamat'            => $data['alamat'],
-            'kontak'            => $data['kontak']
+            'kontak'            => $data['kontak'],
+            'id_jurusan'        => $data['id_jurusan'],
         ]);
 
         if($user && $asesor) {

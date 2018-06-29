@@ -18,7 +18,7 @@
 			
 			<div class="card-title row">
 		        <div class="col">
-		            <h3>Penilaian</h3>
+		            <h3>Penilaian <span class="text-info">| {{ $jurusanAktif->nama_jurusan }}</span> </h3>
 
 		            @if(isset($_GET['q']) && $_GET['q'] != '')
 		            <code>hasil pencarian : "{{ $_GET['q'] }}"</code>

@@ -131,6 +131,24 @@
                             @endif
                         </div>
                     </div>
+
+                    <div class="form-group row">
+                        <label for="id_jurusan" class="col-md-4 col-form-label text-md-right">{{ __('Jurusan') }}</label>
+
+                        <div class="col-md-6">
+                            <select class="form-control" name="id_jurusan">
+                                @foreach($jurusan as $option)
+                                <option value="{{$option->id_jurusan}}" {{ $option->id_jurusan == $asesor->id_jurusan ? 'selected' : '' }} >{{ $option->nama_jurusan }}</option>
+                                @endforeach
+                            </select>
+
+                            @if ($errors->has('id_jurusan'))
+                                <span class="invalid-feedback">
+                                    <strong>{{ $errors->first('id_jurusan') }}</strong>
+                                </span>
+                            @endif
+                        </div>
+                    </div>
                 </div>
             </div>
         </div>
@@ -139,6 +157,7 @@
                 <div class="card-header bg-success text-white">{{ __('Akun') }}</div>
 
                 <div class="card-body">
+
                     <div class="form-group row">
                         <label for="username" class="col-md-4 col-form-label text-md-right">{{ __('Username') }}</label>
 

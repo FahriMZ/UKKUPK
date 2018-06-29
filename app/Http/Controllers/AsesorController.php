@@ -10,6 +10,7 @@ use Illuminate\Support\Facades\Storage;
 use App\Asesor;
 use App\User;
 use App\Perusahaan;
+use App\Jurusan;
 
 use Auth;
 
@@ -56,7 +57,9 @@ class AsesorController extends Controller
             return back()->with('notification', 'Daftarkan <span class="text-info">PERUSAHAAN</span> terlebih dahulu !');
         }
 
-        return view('admin.asesor.create', compact('perusahaan'));
+        $jurusan = Jurusan::all();
+
+        return view('admin.asesor.create', compact('perusahaan', 'jurusan'));
     }
 
     /**
@@ -68,7 +71,7 @@ class AsesorController extends Controller
     public function store(Request $data)
     {
 
-        // dd($data->all());
+        dd($data->all());
 
         // Default akun untuk asesor
 
@@ -109,7 +112,8 @@ class AsesorController extends Controller
             'jenis_kelamin'     => $data['jenis_kelamin'],
             'tanggal_lahir'     => $data['tanggal_lahir'],
             'alamat'            => $data['alamat'],
-            'kontak'            => $data['kontak']
+            'kontak'            => $data['kontak'],
+            'id_jurusan'        => $data['id_jurusan']
         ]);
 
         if($asesor && $user) {
@@ -141,14 +145,16 @@ class AsesorController extends Controller
     {
         $asesor = Asesor::findOrFail($id);
         $perusahaan = Perusahaan::all();
-        return view('admin.asesor.edit', compact('asesor', 'perusahaan'));
+        $jurusan = Jurusan::all();
+        return view('admin.asesor.edit', compact('asesor', 'perusahaan', 'jurusan'));
     }
 
     public function editDataSendiri()
     {
         $asesor = Asesor::findOrFail(Auth::user()->asesor->id_asesor);
         $perusahaan = Perusahaan::all();
-        return view('asesor.data-diri.edit', compact('asesor', 'perusahaan'));
+        $jurusan = Jurusan::all();
+        return view('asesor.data-diri.edit', compact('asesor', 'perusahaan', 'jurusan'));
     }
 
     /**
@@ -169,7 +175,8 @@ class AsesorController extends Controller
             'jenis_kelamin'     => $data['jenis_kelamin'],
             'tanggal_lahir'     => $data['tanggal_lahir'],
             'alamat'            => $data['alamat'],
-            'kontak'            => $data['kontak']
+            'kontak'            => $data['kontak'],
+            'id_jurusan'        => $data['id_jurusan']
         ]);
 
         if($data->password == null) {
