@@ -71,7 +71,7 @@ class AsesorController extends Controller
     public function store(Request $data)
     {
 
-        dd($data->all());
+        // dd($data->all());
 
         // Default akun untuk asesor
 

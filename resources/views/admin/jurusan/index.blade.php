@@ -64,7 +64,7 @@
             </tbody>
         </table>
 
-        {{ $jurusan->links() }}
+        {{ $jurusan->appends(Request::except('page'))->links() }}
 
         @endif
     </div>

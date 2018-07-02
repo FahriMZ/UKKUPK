@@ -57,7 +57,7 @@
         </tbody>
     </table>
 
-    {{ $asesor->links() }}
+    {{ $asesor->appends(Request::except('page'))->links() }}
 
     @endif
 </div>

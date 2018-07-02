@@ -55,7 +55,7 @@
             </tbody>
         </table>
 
-        {{ $kelas->links() }}
+        {{ $kelas->appends(Request::except('page'))->links() }}
 
         @endif
     </div>

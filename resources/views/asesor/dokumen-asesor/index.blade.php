@@ -46,7 +46,7 @@
         @endforeach
     </div>
 
-    {{ $dokumen_asesor->links() }}
+    {{ $dokumen_asesor->appends(Request::except('page'))->links() }}
 
 </div>
 

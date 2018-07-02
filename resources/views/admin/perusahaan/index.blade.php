@@ -57,7 +57,7 @@
             </tbody>
         </table>
 
-        {{ $perusahaan->links() }}
+        {{ $perusahaan->appends(Request::except('page'))->links() }}
 
         @endif
     </div>

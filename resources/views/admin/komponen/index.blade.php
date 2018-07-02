@@ -145,7 +145,7 @@
 
                 @each('rec-item', $komponen->where('parent_komponen', '=', null), 'kom')
 
-                {{ $komponen->links() }}
+                {{ $komponen->appends(Request::except('page'))->links() }}
 
             @endif
             
@@ -200,7 +200,7 @@
                     </tbody>
                 </table>
 
-                {{ $komponenUtama->links() }}
+                {{ $komponenUtama->appends(Request::except('page'))->links() }}
 
                 <!-- Modal tambah detail -->
                 <div class="modal fade" id="tambahDetail" tabindex="-1" role="dialog" aria-hidden="true">

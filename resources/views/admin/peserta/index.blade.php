@@ -64,7 +64,7 @@
         </tbody>
     </table>
 
-    {{ $peserta->links() }}
+    {{ $peserta->appends(Request::except('page'))->links() }}
 </div>
 
 </div>
