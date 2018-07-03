@@ -40,8 +40,7 @@
 
                     <div class="form-group">
                         <label>Jurusan</label>
-                        <select id="select_jurusan_1" name="id_jurusan" class="form-control">
-                            <option disabled selected>-- Pilih salah satu --</option>
+                        <select id="select_jurusan_1" name="id_jurusan" class="form-control" required>
                             @foreach($jurusan as $option)
                                 <option value="{{$option->id_jurusan}}">{{$option->nama_jurusan}}</option>
                             @endforeach
@@ -62,7 +61,13 @@
 
                     <div class="form-group">
                         <label for="komponen">Komponen</label>
-                        <textarea name="komponen" id="komponen" class="form-control"></textarea>
+                        <textarea name="komponen" id="komponen" class="form-control{{ $errors->has('komponen') ? ' is-invalid' : '' }}" required></textarea>
+
+                        @if ($errors->has('komponen'))
+                            <span class="invalid-feedback">
+                                <strong>{{ $errors->first('komponen') }}</strong>
+                            </span>
+                        @endif
                     </div>
 
                     <div class="form-group">

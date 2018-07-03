@@ -8,6 +8,13 @@
     right: 35px;
     z-index: 9999999;
 }
+
+.add-two-custom {
+    position: fixed;
+    bottom: 35px;
+    right: 175px;
+    z-index: 1000;
+}
 </style>
 @stop
 
@@ -15,7 +22,7 @@
 
 <a href="{{route('admin.peserta.create')}}" class="btn btn-outline-success add">Tambah Peserta</a>
 
-<a href="{{route('admin.peserta.import')}}" class="btn btn-success add-two">Import Peserta</a>
+<a href="{{route('admin.peserta.import')}}" class="btn btn-success add-two-custom">Import Peserta</a>
 <div class="container-fluid">
 
 <div class="container-fluid card card-body card-title">

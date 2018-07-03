@@ -62,6 +62,12 @@ class KomponenController extends Controller
      */
     public function store(Request $request)
     {
+        $request->validate([
+            'komponen' => 'required'
+        ], [
+            'komponen.required' => 'Komponen harus diisi'
+        ]);
+
         Komponen::create([
             'komponen'  => $request['komponen'],
             'parent_komponen'  => $request['parent_komponen'] == null ? null : $request['parent_komponen'],
