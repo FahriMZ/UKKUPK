@@ -189,10 +189,74 @@
             model.append("<option value=''>Tidak ada</option>")
 
             $.each(data, function(index, element) {
+                model.append("<option data_tahun='"+ element.id_tahun_ajar +"' value='"+element.id_komponen+"'>" + element.komponen + "</option>")
+            })
+        });
+    });
+
+    // Untuk Link select copy komponen
+    $('#select_tahun_c_1').change(function() {
+        $.get("{{ url('api/dropdown/copy/jurusan') }}", {
+            option : $(this).val()
+        }, function(data) {
+            var model = $('#select_jurusan_c_1');
+            model.empty();
+
+            model.append("<option value='' disabled selected> --pilih salah satu-- </option>")
+
+            $.each(data, function(index, element) {
+                model.append("<option value='"+element.id_jurusan+"'>" + element.nama_jurusan + "</option>")
+            })
+        });
+    });
+
+    $('#select_tahun_c_2').change(function() {
+        $.get("{{ url('api/dropdown/copy/jurusan') }}", {
+            option : $(this).val()
+        }, function(data) {
+            var model = $('#select_jurusan_c_2');
+            model.empty();
+
+            model.append("<option value='' disabled selected> --pilih salah satu-- </option>")
+
+            $.each(data, function(index, element) {
+                model.append("<option value='"+element.id_jurusan+"'>" + element.nama_jurusan + "</option>")
+            })
+        });
+    });
+
+    $('#select_jurusan_c_1').change(function() {
+        $.get("{{ url('api/dropdown/copy/komponen') }}", {
+            option : $(this).val(),
+            tahun: $("#select_tahun_c_1").val()
+        }, function(data) {
+            var model = $('#select_komponen_c_1');
+            model.empty();
+
+            model.append("<option value='' disabled selected> --pilih salah satu-- </option>")
+
+            $.each(data, function(index, element) {
+                model.append("<option value='"+element.komponen+"'>" + element.komponen + "</option>")
+            })
+        });
+    });
+
+    $('#select_jurusan_c_2').change(function() {
+        $.get("{{ url('api/dropdown/copy/komponen') }}", {
+            option : $(this).val(),
+            tahun: $("#select_tahun_c_2").val()
+        }, function(data) {
+            var model = $('#select_komponen_c_2');
+            model.empty();
+
+            model.append("<option value=''>Tidak ada</option>")
+
+            $.each(data, function(index, element) {
                 model.append("<option value='"+element.id_komponen+"'>" + element.komponen + "</option>")
             })
         });
     });
+
     </script>
 
     @yield('js')

@@ -9,6 +9,8 @@ use App\DetailKomponen;
 use App\Indikator;
 use App\Jurusan;
 use App\JurusanAktif;
+use App\TahunAktif;
+use App\TahunAjar;
 
 class KomponenController extends Controller
 {
@@ -23,6 +25,7 @@ class KomponenController extends Controller
      */
     public function index()
     {
+        $tahun_aktif = TahunAktif::first();
         $idJurusanAktif = JurusanAktif::first()['id_jurusan'];
         $komponenUtama = Komponen::where('id_jurusan', $idJurusanAktif)
                             ->where('parent_komponen', null)->paginate(5);
@@ -31,17 +34,25 @@ class KomponenController extends Controller
         if(isset($_GET['q'])) {
             $komponen = Komponen::where('id_jurusan', $idJurusanAktif)
                             ->where('komponen', 'LIKE', '%'.$_GET['q'].'%')
-                            ->where('parent_komponen', null)->paginate(1);
+                            ->where('parent_komponen', null)
+                            ->where('id_tahun_ajar', $tahun_aktif->id_tahun_ajar)
+                            ->paginate(1);
         } else {
             $komponen = Komponen::where('id_jurusan', $idJurusanAktif)
-                            ->where('parent_komponen', null)->paginate(1);
+                            ->where('parent_komponen', null)
+                            ->where('id_tahun_ajar', $tahun_aktif->id_tahun_ajar)
+                            ->paginate(1);
         }
+
+        $tahun_ajar = TahunAjar::all();
+        
+
         // $komponen = Komponen::where('parent_komponen', null)->get();
         // $s = Komponen::find(1);
 
         // return response()->json($komponenUtama);
 
-        return view('admin.komponen.index', compact('komponenUtama', 'komponen', 'semuaKomponen','jurusan'));
+        return view('admin.komponen.index', compact('komponenUtama', 'komponen', 'semuaKomponen','jurusan', 'tahun_ajar', 'tahun_aktif'));
     }
 
     /**
@@ -63,7 +74,8 @@ class KomponenController extends Controller
     public function store(Request $request)
     {
         $request->validate([
-            'komponen' => 'required'
+            'komponen' => 'required',
+            'id_jurusan' => 'required'
         ], [
             'komponen.required' => 'Komponen harus diisi'
         ]);
@@ -71,7 +83,8 @@ class KomponenController extends Controller
         Komponen::create([
             'komponen'  => $request['komponen'],
             'parent_komponen'  => $request['parent_komponen'] == null ? null : $request['parent_komponen'],
-            'id_jurusan' => $request['id_jurusan']
+            'id_jurusan' => $request['id_jurusan'],
+            'id_tahun_ajar' => TahunAktif::first()['id_tahun_ajar']
         ]);
 
         return redirect()->back()->with('notification', 'Action completed');
@@ -80,11 +93,13 @@ class KomponenController extends Controller
     // Menyalin komponen yang sudah ada
     public function storeCopy(Request $request)
     {
+        // return $request;
 
         Komponen::create([
             'komponen'  => $request['komponen'],
             'parent_komponen'  => $request['parent_komponen'] == null ? null : $request['parent_komponen'],
-            'id_jurusan' => $request['id_jurusan']
+            'id_jurusan' => $request['id_jurusan'],
+            'id_tahun_ajar' => $request['id_tahun_ajar']
         ]);
 
         return redirect()->back()->with('notification', 'Action completed');

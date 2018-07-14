@@ -74,7 +74,8 @@
                             <th>#</th>
                             <th>Komponen</th>
                             <th>Parent Komponen</th>
-                            <th colspan="2">Skor</th>
+                            <th>Skor</th>
+                            <th colspan="2">Kompetensi</th>
                         </thead>
                         <tbody>
 
@@ -84,6 +85,29 @@
                                 <td>{{$komponen->komponen}}</td>
                                 <td>{{$komponen->parent->komponen}}</td>
                                 <td>{{$komponen->skor}}</td>
+                                <td>
+
+                                    @switch(true)
+
+                                        @case($komponen->skor < 7)
+                                            Tidak
+                                            @break
+                                        @case($komponen->skor >= 7 && $komponen->skor < 8)
+                                            CK
+                                            @break
+                                        @case($komponen->skor >= 8 && $komponen->skor < 9)
+                                            K
+                                            @break
+                                        @case($komponen->skor >= 9 && $komponen->skor <= 10)
+                                            SK
+                                            @break
+                                        @default
+                                            Error
+                                            @break
+
+                                    @endswitch
+
+                                </td>
                                 
                                 @if(Auth::user()->akses == 'asesor' && Auth::user()->asesor->id_asesor == $asesor->where('tipe_ukk', 'pra ukk')->first()['id_asesor'])
 
@@ -97,7 +121,7 @@
                     </table>
 
                     <div class="float-right">
-                        {{ $detailPenilaian_praukk->render() }}
+                        {{ $detailPenilaian_praukk->fragment('pills-home')->links() }}
                     </div>
                 </div>
 
@@ -152,7 +176,7 @@
                     </table>
 
                     <div class="float-right">
-                        {{ $detailPenilaian_realukk->render() }}
+                        {{ $detailPenilaian_realukk->fragment('pills-about')->links() }}
                     </div>
                 </div>
 
@@ -209,6 +233,13 @@
 @stop
 
 @section('js')
+
+<script type="text/javascript">
+    
+    $('a[href="'+window.location.hash+'"]').tab('show');
+    // console.log(window.location.hash);
+
+</script>
 
 <script type="text/javascript">
     

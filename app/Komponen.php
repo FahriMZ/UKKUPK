@@ -32,7 +32,7 @@ class Komponen extends Model
     /**
      * @var array
      */
-    protected $fillable = ['parent_komponen', 'komponen', 'id_jurusan'];
+    protected $fillable = ['parent_komponen', 'komponen', 'id_jurusan', 'id_tahun_ajar'];
 
     /**
      * Indicates if the model should be timestamped.
@@ -79,6 +79,10 @@ class Komponen extends Model
     public function indikator()
     {
         return $this->hasMany('App\Indikator', 'id_komponen', 'id_komponen');
+    }
+
+    public function tahunAjar() {
+        return $this->belongsTo('App\TahunAjar', 'id_tahun_ajar');
     }
 
     // Hapus komponen beserta semua relasinya

@@ -25,7 +25,16 @@
 			
 			<div class="card-title row">
 				<div class="col">
-					<h4>Penilaian <span class="text-primary">{{ $tahunAktif->tahunAjar->tahun_ajar }}</span></h4>
+					<h4>Penilaian 
+						<span class="text-info">
+						@if(Request::segment(3) == 'hasil-akhir')
+						[Pra UKK]
+						@elseif(Request::segment(3) == 'hasil-akhir-real')
+						[Real UKK]
+						@endif
+						</span>
+						<span class="text-primary">{{ $tahunAktif->tahunAjar->tahun_ajar }}</span>
+					</h4>
 
 					{{-- @if(isset($_GET['q']) && $_GET['q'] != '')
 	                <code>hasil pencarian : "{{ $_GET['q'] }}"</code>

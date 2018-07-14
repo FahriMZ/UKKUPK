@@ -10,7 +10,7 @@
     
     <div class="card card-body mb-3">
         <h3 class="card-title">Komponen</h3>
-
+        <p>Tahun Ajar : {{ $tahun_aktif->tahunAjar->tahun_ajar }}</p>
         <ul class="nav nav-pills" id="pills-tab" role="tablist">
             <li class="nav-item">
                 <a href="#pills-home" class="nav-link active" id="pills-home-tab" data-toggle="pill" role="tab" aria-controls="pills-home" aria-selected="true">Semua Komponen</a>
@@ -41,6 +41,7 @@
                     <div class="form-group">
                         <label>Jurusan</label>
                         <select id="select_jurusan_1" name="id_jurusan" class="form-control" required>
+                            <option disabled selected value=""> --Pilih salah satu-- </option>
                             @foreach($jurusan as $option)
                                 <option value="{{$option->id_jurusan}}">{{$option->nama_jurusan}}</option>
                             @endforeach
@@ -87,36 +88,76 @@
                 <form method="POST" action="{{route('admin.komponen.create-copy')}}">
                     
                     @csrf
+                    {{-- DARI komponen --}}
+                    <fieldset>
+                        <legend>Dari</legend>
+                        <div class="form-group">
+                            <label>Tahun Ajar</label>
+                            <select id="select_tahun_c_1" name="id_tahun_ajar" class="form-control" required>
+                                <option disabled selected value=""> --Pilih salah satu-- </option>
+                                @foreach($tahun_ajar as $option)
+                                    <option value="{{$option->id_tahun_ajar}}">{{$option->tahun_ajar}}</option>
+                                @endforeach
+                            </select>
+                        </div>
 
-                    <div class="form-group">
-                        <label>Komponen</label>
-                        <select name="komponen" class="form-control">
-                            @foreach($semuaKomponen as $option)
-                                <option value="{{$option->komponen}}">{{$option->komponen}}</option>
-                            @endforeach
-                        </select>
-                    </div>
+                        <div class="form-group">
+                            <label>Jurusan</label>
+                            <select id="select_jurusan_c_1" name="id_jurusan" class="form-control" required>
+                                <option disabled selected value=""> --Pilih salah satu-- </option>
+                                {{-- @foreach($jurusan as $option)
+                                    <option value="{{$option->id_jurusan}}">{{$option->nama_jurusan}}</option>
+                                @endforeach --}}
 
-                    <div class="form-group">
-                        <label>Jurusan</label>
-                        <select id="select_jurusan_2" name="id_jurusan" class="form-control">
-                            @foreach($jurusan as $option)
-                                <option value="{{$option->id_jurusan}}">{{$option->nama_jurusan}}</option>
-                            @endforeach
+                            </select>
+                        </div>
 
-                        </select>
-                    </div>
+                        <div class="form-group">
+                            <label>Komponen</label>
+                            <select id="select_komponen_c_1" name="komponen" class="form-control" required>
+                                <option disabled selected value=""> --Pilih salah satu-- </option>
+                                {{-- @foreach($semuaKomponen as $option)
+                                    <option value="{{$option->komponen}}">{{$option->komponen}}</option>
+                                @endforeach --}}
+                            </select>
+                        </div>
+                    </fieldset>
+                    
+                    <fieldset>
+                        <legend>Ke</legend>
 
-                    <div class="form-group">
-                        <label>Parent Komponen</label>
-                        <select id="select_parent_komponen_2" name="parent_komponen" class="form-control">
-                            <option value="">Tidak ada</option>
-                            {{-- @foreach($semuaKomponen as $option)
-                                <option value="{{$option->id_komponen}}">{{$option->komponen}}</option>
-                            @endforeach --}}
+                        <div class="form-group">
+                            <label>Tahun Ajar</label>
+                            <select id="select_tahun_c_2" name="id_tahun_ajar" class="form-control">
+                                <option disabled selected value=""> --Pilih salah satu-- </option>
+                                @foreach($tahun_ajar as $option)
+                                    <option value="{{$option->id_tahun_ajar}}">{{$option->tahun_ajar}}</option>
+                                @endforeach
+                            </select>
+                        </div>
 
-                        </select>
-                    </div>
+                        <div class="form-group">
+                            <label>Jurusan</label>
+                            <select id="select_jurusan_c_2" name="id_jurusan" class="form-control">
+                                <option disabled selected value=""> --Pilih salah satu-- </option>
+                                @foreach($jurusan as $option)
+                                    <option value="{{$option->id_jurusan}}">{{$option->nama_jurusan}}</option>
+                                @endforeach
+
+                            </select>
+                        </div>
+
+                        <div class="form-group">
+                            <label>Parent Komponen</label>
+                            <select id="select_komponen_c_2" name="parent_komponen" class="form-control">
+                                <option value="">Tidak ada</option>
+                                {{-- @foreach($semuaKomponen as $option)
+                                    <option value="{{$option->id_komponen}}">{{$option->komponen}}</option>
+                                @endforeach --}}
+
+                            </select>
+                        </div>
+                    </fieldset>
 
                     <div class="form-group">
                         <button class="btn btn-primary btn-block">Save</button>

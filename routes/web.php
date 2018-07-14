@@ -172,9 +172,27 @@ Route::get('/api/dropdown', function() {
     return Response::make($parentKomponen->get(['id_komponen', 'komponen']));
 });
 
+Route::get('/api/dropdown/copy/jurusan', function() {
 
+    $input = Request::get('option');
+    // return $input;
+    $jurusan = Jurusan::join('komponen', 'komponen.id_jurusan', 'jurusan.id_jurusan')
+                    ->select('jurusan.id_jurusan', 'nama_jurusan')
+                    ->where('komponen.id_tahun_ajar', $input)
+                    ->groupBy('jurusan.id_jurusan');
+    return Response::make($jurusan->get());
 
+});
 
+Route::get('/api/dropdown/copy/komponen', function() {
 
+    $input = Request::get('option');
+    $id_tahun_ajar = Request::get('tahun');
+    // return $input;
+    $komponen = Komponen::where('id_jurusan', $input)
+                            ->where('id_tahun_ajar', $id_tahun_ajar);
+    // return $komponen;
+    return Response::make($komponen->get(['id_komponen', 'komponen']));
+});
 
 

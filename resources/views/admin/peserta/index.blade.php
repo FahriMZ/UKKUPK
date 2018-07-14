@@ -26,7 +26,8 @@
 <div class="container-fluid">
 
 <div class="container-fluid card card-body card-title">
-    <h4>Tahun Aktif : {{$tahun_aktif['tahun_ajar']}}</h4>
+    <h4>Daftar Peserta</h4>
+    <p>Jurusan : {{ $jurusanAktif->jurusan->nama_jurusan }}</p>
     @if($peserta->count() <= 0)
     <p class="card-subtitle">Tidak ada peserta</p>
     @endif
@@ -35,7 +36,8 @@
 <div class="card card-body">
     <div class="row">
         <div class="col card-title">
-            <h3>Peserta</h3>
+            {{-- <h3>Peserta</h3> --}}
+            <h5>Tahun Aktif : {{$tahun_aktif['tahun_ajar']}}</h5>
             @if(isset($_GET['q']) && $_GET['q'] != '')
             <code>hasil pencarian : "{{ $_GET['q'] }}"</code>
             @endif

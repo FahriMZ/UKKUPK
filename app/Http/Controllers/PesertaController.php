@@ -29,6 +29,7 @@ class PesertaController extends Controller
 
         // dd($tahun_aktif);
         // $peserta = Peserta::all();
+        $jurusanAktif = JurusanAktif::first();
 
         if(isset($_GET['q'])) {
             $peserta = Peserta::join('kelas', 'peserta.id_kelas', 'kelas.id_kelas')
@@ -43,7 +44,7 @@ class PesertaController extends Controller
                         ->paginate(7);
         }
 
-        return view('admin.peserta.index', compact('peserta', 'tahun_aktif'));
+        return view('admin.peserta.index', compact('peserta', 'tahun_aktif', 'jurusanAktif'));
     }
 
     /**

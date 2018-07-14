@@ -10,6 +10,10 @@
     <div class="row">
 
     <div class="card card-body col-6">
+
+        <h4>Komponen:</h4>
+        <p>{{ $komponen->komponen }}</p>
+
         <table class="table">
             
             <thead>
